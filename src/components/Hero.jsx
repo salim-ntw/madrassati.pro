@@ -1,5 +1,5 @@
 import React from "react";
-import mainBg from "../assets/mainBg.jpg";
+import mainBg from "../assets/new-bg-hero.jpg";
 
 function Hero() {
   return (
