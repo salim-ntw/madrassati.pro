@@ -53,7 +53,7 @@ function Nav() {
           <li>
             <Link
               to="/login"
-              className="bg-[#0a1b4f] text-white px-4 py-2 rounded hover:bg-gray-500 active:opacity-70 transition duration-300"
+              className="bg-[#0a1b4f] text-white px-4 py-2 rounded-xl hover:bg-gray-500 active:opacity-70 transition duration-300"
             >
               Login
             </Link>
