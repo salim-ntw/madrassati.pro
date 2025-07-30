@@ -3,12 +3,12 @@ import { Link } from "react-router-dom";
 import logo from "../assets/mdr.png";
 function Nav() {
   return (
-    <div className="flex flex-row justify-between w-full items-center bg-amber-300 p-4 shadow-md">
+    <div className="flex flex-row justify-between w-full items-center bg-white pl-4 pr-18 shadow-sm h-[80px] fixed top-0 z-50">
       <a href="#hero">
-        <img src={logo} alt="logo" className="w-28 h-16" />
+        <img src={logo} alt="logo" className="w-28 h-28" />
       </a>
       <div>
-        <ul className="flex flex-row gap-4 text-lg font-semibold">
+        <ul className="flex flex-row gap-12 text-lg font-semibold ">
           <li>
             <a href="#hero">Home</a>
           </li>
