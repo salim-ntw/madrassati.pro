@@ -1,5 +1,6 @@
 import React from "react";
 import mainBg from "../assets/new-bg-hero.jpg";
+import { Link } from "react-router-dom";
 
 function Hero() {
   return (
@@ -17,9 +18,12 @@ function Hero() {
         <p className="max-w-2xl text-lg md:text-xl font-cairo drop-shadow-md text-[#100071] ">
           Stay connected to your child's school life anytime, anywhere.
         </p>
-        <button className="mt-6 bg-gray-500 hover:bg-gray-700 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition duration-300 cursor-pointer active:opacity-70">
+        <Link
+          to="/register"
+          className="mt-6 bg-gray-500 hover:bg-gray-700 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition duration-300 cursor-pointer active:opacity-70"
+        >
           Join Us
-        </button>
+        </Link>
       </div>
     </section>
   );
