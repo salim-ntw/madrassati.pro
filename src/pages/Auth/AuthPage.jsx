@@ -1,106 +1,72 @@
 import React, { useState } from "react";
-import "../../auth.css"; // ou le chemin de ton CSS si renommé
+import "../../Auth.css"; // ou le chemin de ton CSS si renommé
 import "boxicons/css/boxicons.min.css";
 
- function AuthPage() {
-  const [isRegister, setIsRegister] = useState(false);
+function AuthPage() {
+  const [isRegistering, setIsRegistering] = useState(false);
+
+  const toggleMode = () => {
+    setIsRegistering(!isRegistering);
+  };
 
   return (
-    <div className={`container ${isRegister ? "register-mode" : ""}`}>
+    <div className="auth-container">
+    <div className={`container ${isRegistering ? "active" : ""}`}>
+      {/* --- FORM BOX --- */}
       <div className="form-box login">
         <form>
           <h1>Login</h1>
           <div className="input-box">
-            <input type="text" placeholder="Username" required />
-            <i className="bx bxs-user"></i>
+            <input type="email" placeholder="Email" />
           </div>
           <div className="input-box">
-            <input type="password" placeholder="Password" required />
-            <i className="bx bxs-lock-alt"></i>
-          </div>
-          <div className="forgot-link">
-            <a href="#">Forgot Password?</a>
+            <input type="password" placeholder="Password" />
           </div>
           <button type="submit" className="btn">
             Login
           </button>
-          <p>or login with social platforms</p>
-          <div className="social-icons">
-            <a href="#">
-              <i className="bx bxl-google"></i>
-            </a>
-            <a href="#">
-              <i className="bx bxl-facebook"></i>
-            </a>
-            <a href="#">
-              <i className="bx bxl-github"></i>
-            </a>
-            <a href="#">
-              <i className="bx bxl-linkedin"></i>
-            </a>
-          </div>
         </form>
       </div>
 
       <div className="form-box register">
         <form>
-          <h1>Registration</h1>
+          <h1>Register</h1>
           <div className="input-box">
-            <input type="text" placeholder="Username" required />
-            <i className="bx bxs-user"></i>
+            <input type="text" placeholder="Name" />
           </div>
           <div className="input-box">
-            <input type="email" placeholder="Email" required />
-            <i className="bx bxs-envelope"></i>
+            <input type="email" placeholder="Email" />
           </div>
           <div className="input-box">
-            <input type="password" placeholder="Password" required />
-            <i className="bx bxs-lock-alt"></i>
+            <input type="password" placeholder="Password" />
           </div>
           <button type="submit" className="btn">
             Register
           </button>
-          <p>or register with social platforms</p>
-          <div className="social-icons">
-            <a href="#">
-              <i className="bx bxl-google"></i>
-            </a>
-            <a href="#">
-              <i className="bx bxl-facebook"></i>
-            </a>
-            <a href="#">
-              <i className="bx bxl-github"></i>
-            </a>
-            <a href="#">
-              <i className="bx bxl-linkedin"></i>
-            </a>
-          </div>
         </form>
       </div>
 
+      {/* --- TOGGLE BOX --- */}
       <div className="toggle-box">
         <div className="toggle-panel toggle-left">
-          <h1>Hello, Welcome!</h1>
-          <p>Don't have an account?</p>
-          <button
-            className="btn register-btn"
-            onClick={() => setIsRegister(true)}
-          >
+          <h1>Welcome Back!</h1>
+          <p>Already have an account?</p>
+          <button className="btn" onClick={toggleMode}>
             Register
           </button>
         </div>
+
         <div className="toggle-panel toggle-right">
-          <h1>Welcome Back!</h1>
-          <p>Already have an account?</p>
-          <button
-            className="btn login-btn"
-            onClick={() => setIsRegister(false)}
-          >
+          <h1>New Here?</h1>
+          <p>Create your account to get started</p>
+          <button className="btn" onClick={toggleMode}>
             Login
           </button>
         </div>
       </div>
     </div>
+    </div>
   );
 }
+
 export default AuthPage;
