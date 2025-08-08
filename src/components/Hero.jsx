@@ -1,6 +1,7 @@
 import React from "react";
 import mainBg from "../assets/new-bg-hero.jpg";
 import { Link } from "react-router-dom";
+import "../index.css"; // Assurez-vous que le chemin est correct
 
 function Hero() {
   return (
@@ -19,7 +20,7 @@ function Hero() {
           Stay connected to your child's school life anytime, anywhere.
         </p>
         <Link
-          to="/register"
+          to="/auth"
           className="mt-6 bg-gray-500 hover:bg-gray-700 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition duration-300 cursor-pointer active:opacity-70"
         >
           Join Us

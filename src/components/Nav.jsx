@@ -52,7 +52,7 @@ function Nav() {
           </li>
           <li>
             <Link
-              to="/login"
+              to="/auth"
               className="bg-[#0a1b4f] text-white px-4 py-2 rounded-xl hover:bg-gray-500 active:opacity-70 transition duration-300"
             >
               Login
