@@ -1,7 +1,7 @@
 import React from "react";
 import mainBg from "../assets/new-bg-hero.jpg";
 import { Link } from "react-router-dom";
-import "../index.css"; // Assurez-vous que le chemin est correct
+import "../index.css"; 
 
 function Hero() {
   return (
