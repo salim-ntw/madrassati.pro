@@ -42,24 +42,23 @@ form {
   width: 100%;
 }
 
-<<<<<<< HEAD
-        .input-box input::placeholder{
-            color: #888;
-            font-weight: 400;
-        }
-    
-    .input-box i{
-        position: absolute;
-        right: 20px;
-        top: 50%;
-        transform: translateY(-50%);
-        font-size: 20px;
-    }
-    .input-box input:focus {
-        border-color: #07172a;
-        box-shadow: 0 0 10px rgba(2, 68, 144, 0.5);
-    }
-=======
+ .input-box input::placeholder {
+  color: #888;
+  font-weight: 400;
+}
+
+.input-box i {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 20px;
+}
+.input-box input:focus {
+  border-color: #07172a;
+  box-shadow: 0 0 10px rgba(2, 68, 144, 0.5);
+}
+
 .form-box {
   position: absolute;
   right: 0;
@@ -74,7 +73,6 @@ form {
   z-index: 1;
   transition: 0.6s ease-in-out 1.2s, visibility 0s 1s;
 }
->>>>>>> 3f274d1d1f6cd8654ecaca6a9bda5c41f3269b60
 
 .container.active .form-box {
   right: 50%;
@@ -212,43 +210,41 @@ form {
   margin-bottom: 20px;
 }
 
-<<<<<<< HEAD
-  
-    /* Style pour le select dans la case rôle */
-    .input-box select {
-        width: 100%;
-        padding: 13px 50px 13px 20px;
-        background: #eee;
-        border-radius: 8px;
-        border: none;
-        outline: none;
-        font-size: 16px;
-        color: #6c6a6a;
-        
-        appearance: none; /* supprime la flèche par défaut */
-    }
-    
-    /* Style au focus */
-    .input-box select:focus {
-        border-color: #07172a;
-        box-shadow: 0 0 10px rgba(2, 68, 144, 0.5);
-    }
-    
-    /* Option normale */
-    .input-box select option {
-        padding: 8px;
-        font-weight: normal; /* pas de gras */
-    }
-    
-    /* Placeholder */
-    .input-box select option[disabled] {
-        color: rgba(0, 0, 0, 0.4); /* gris transparent */
-        font-weight: normal;
-    }
-    
+/* Style pour le select dans la case rôle */
+.input-box select {
+  width: 100%;
+  padding: 13px 50px 13px 20px;
+  background: #eee;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  color: #6c6a6a;
+
+  appearance: none; /* supprime la flèche par défaut */
+}
+
+/* Style au focus */
+.input-box select:focus {
+  border-color: #07172a;
+  box-shadow: 0 0 10px rgba(2, 68, 144, 0.5);
+}
+
+/* Option normale */
+.input-box select option {
+  padding: 8px;
+  font-weight: normal; /* pas de gras */
+}
+
+/* Placeholder */
+.input-box select option[disabled] {
+  color: rgba(0, 0, 0, 0.4); /* gris transparent */
+  font-weight: normal;
+}
 
 /* @media screen and (max-width: 650px){
-=======
+  }
+
 .toggle-panel .btn {
   width: 160px;
   height: 46px;
@@ -314,3 +310,4 @@ form {
     .toggle-panel h1{font-size: 30px; }
 }
 >>>>>>> 3f274d1d1f6cd8654ecaca6a9bda5c41f3269b60
+*/

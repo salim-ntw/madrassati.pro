@@ -1,13 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
-
-import "../app.css"; // Assurez-vous que le chemin est correct
+import logo from "../assets/no-bg-logo.png"; 
+import "../app.css"; 
 
 function Nav() {
   return (
     <nav class="navbar">
       <a href="#">
-        <img src="" alt="logo" class="logo" />
+        <img src={logo} alt="logo" class="logo" />
       </a>
       <ul class="nav-links">
         <li>
