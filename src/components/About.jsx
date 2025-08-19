@@ -29,8 +29,8 @@ function About() {
     },
   ];
   return (
-    <div className="bg-gray-50  text-gray-900 ">
-      <section className="max-w-6xl mx-auto px-6 py-16 grid  gap-10 items-center flex flex-col">
+    <div id="about" className="bg-gray-50  text-gray-900 ">
+      <section className="max-w-5xl mx-auto px-6 py-6   gap-10 items-center flex flex-col">
         <h1 className="text-3xl text-gray-700 font-bold text-center ">
           Who We Are
         </h1>
@@ -42,16 +42,16 @@ function About() {
               grades, and schedules—making education more transparent and
               accessible for everyone.
             </p>
-            <ul className="space-y-2 text-gray-700">
-              <li className="flex items-center flex-row gap-2">
+            <ul className="space-y-3 text-gray-700">
+              <li className="flex items-center flex-row gap-2 transition-transform duration-300 ease-in-out hover:translate-x-2 hover:scale-100">
                 <img src={checkIcon} alt="checked" className="w-[20px]" />
                 Parents can chat in real time with teachers
               </li>
-              <li className="flex items-center flex-row gap-2">
+              <li className="flex items-center flex-row gap-2  transition-transform duration-300 ease-in-out hover:translate-x-2 hover:scale-100">
                 <img src={checkIcon} alt="checked" className="w-[20px]" />
                 Check grades, schedules, and attendance anytime
               </li>
-              <li className="flex items-center flex-row gap-2">
+              <li className="flex items-center flex-row gap-2  transition-transform duration-300 ease-in-out hover:translate-x-2 hover:scale-100">
                 <img src={checkIcon} alt="checked" className="w-[20px]" />
                 Teachers manage classes and share updates easily
               </li>
