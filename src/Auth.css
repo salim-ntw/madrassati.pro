@@ -17,6 +17,7 @@ body{
     background: linear-gradient(90deg, #e2e2e2, #c9d6ff);
 }*/
 
+
 .container {
   position: relative;
   width: 850px;
@@ -73,6 +74,22 @@ form {
   z-index: 1;
   transition: 0.6s ease-in-out 1.2s, visibility 0s 1s;
 }
+        .input-box input::placeholder{
+            color: #888;
+            font-weight: 400;
+        }
+    
+    .input-box i{
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 20px;
+    }
+    .input-box input:focus {
+        border-color: #07172a;
+        box-shadow: 0 0 10px rgba(2, 68, 144, 0.5);
+    }
 
 .container.active .form-box {
   right: 50%;
@@ -245,6 +262,7 @@ form {
 /* @media screen and (max-width: 650px){
   }
 
+
 .toggle-panel .btn {
   width: 160px;
   height: 46px;
@@ -254,6 +272,7 @@ form {
 }
 
 @media screen and (max-width: 650px){
+/* @media screen and (max-width: 650px){
     .container{ height: calc(100vh - 40px); }
 
   .form-box {
@@ -311,3 +330,4 @@ form {
 }
 >>>>>>> 3f274d1d1f6cd8654ecaca6a9bda5c41f3269b60
 */
+}  */
