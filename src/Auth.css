@@ -92,6 +92,10 @@ form{ width: 100%; }
         transform: translateY(-50%);
         font-size: 20px;
     }
+    .input-box input:focus {
+        border-color: #07172a;
+        box-shadow: 0 0 10px rgba(2, 68, 144, 0.5);
+    }
 
 .forgot-link{ margin: -15px 0 15px; }
     .forgot-link a{
@@ -189,6 +193,40 @@ form{ width: 100%; }
         border: 2px solid #fff;
         box-shadow: none;
     }
+
+  
+    /* Style pour le select dans la case rôle */
+    .input-box select {
+        width: 100%;
+        padding: 13px 50px 13px 20px;
+        background: #eee;
+        border-radius: 8px;
+        border: none;
+        outline: none;
+        font-size: 16px;
+        color: #6c6a6a;
+        
+        appearance: none; /* supprime la flèche par défaut */
+    }
+    
+    /* Style au focus */
+    .input-box select:focus {
+        border-color: #07172a;
+        box-shadow: 0 0 10px rgba(2, 68, 144, 0.5);
+    }
+    
+    /* Option normale */
+    .input-box select option {
+        padding: 8px;
+        font-weight: normal; /* pas de gras */
+    }
+    
+    /* Placeholder */
+    .input-box select option[disabled] {
+        color: rgba(0, 0, 0, 0.4); /* gris transparent */
+        font-weight: normal;
+    }
+    
 
 /* @media screen and (max-width: 650px){
     .container{ height: calc(100vh - 40px); }
