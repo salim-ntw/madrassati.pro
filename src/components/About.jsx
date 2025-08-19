@@ -76,9 +76,9 @@ function About() {
           </p>
 
           <div className="grid gap-8 grid-cols-4">
-            {services.map((services, idx) => (
+            {services.map((services, index) => (
               <div
-                key={idx}
+                key={index}
                 className="bg-gray-50 p-6 rounded-2xl shadow hover:shadow-xl transition transform hover:-translate-y-1 text-center"
               >
                 <img
