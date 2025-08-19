@@ -1,6 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 
-*{
+/* *{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -15,7 +15,7 @@ body{
     align-items: center;
     min-height: 100vh;
     background: linear-gradient(90deg, #e2e2e2, #c9d6ff);
-}
+} */
 
 .container{
     position: relative;
@@ -42,7 +42,6 @@ form {
   width: 100%;
 }
 
-<<<<<<< HEAD
         .input-box input::placeholder{
             color: #888;
             font-weight: 400;
@@ -59,22 +58,6 @@ form {
         border-color: #07172a;
         box-shadow: 0 0 10px rgba(2, 68, 144, 0.5);
     }
-=======
-.form-box {
-  position: absolute;
-  right: 0;
-  width: 50%;
-  height: 100%;
-  background: #fff;
-  display: flex;
-  align-items: center;
-  color: #333;
-  text-align: center;
-  padding: 40px;
-  z-index: 1;
-  transition: 0.6s ease-in-out 1.2s, visibility 0s 1s;
-}
->>>>>>> 3f274d1d1f6cd8654ecaca6a9bda5c41f3269b60
 
 .container.active .form-box {
   right: 50%;
@@ -212,43 +195,6 @@ form {
   margin-bottom: 20px;
 }
 
-<<<<<<< HEAD
-  
-    /* Style pour le select dans la case rôle */
-    .input-box select {
-        width: 100%;
-        padding: 13px 50px 13px 20px;
-        background: #eee;
-        border-radius: 8px;
-        border: none;
-        outline: none;
-        font-size: 16px;
-        color: #6c6a6a;
-        
-        appearance: none; /* supprime la flèche par défaut */
-    }
-    
-    /* Style au focus */
-    .input-box select:focus {
-        border-color: #07172a;
-        box-shadow: 0 0 10px rgba(2, 68, 144, 0.5);
-    }
-    
-    /* Option normale */
-    .input-box select option {
-        padding: 8px;
-        font-weight: normal; /* pas de gras */
-    }
-    
-    /* Placeholder */
-    .input-box select option[disabled] {
-        color: rgba(0, 0, 0, 0.4); /* gris transparent */
-        font-weight: normal;
-    }
-    
-
-/* @media screen and (max-width: 650px){
-=======
 .toggle-panel .btn {
   width: 160px;
   height: 46px;
@@ -257,8 +203,7 @@ form {
   box-shadow: none;
 }
 
-@media screen and (max-width: 650px){
->>>>>>> 3f274d1d1f6cd8654ecaca6a9bda5c41f3269b60
+/* @media screen and (max-width: 650px){
     .container{ height: calc(100vh - 40px); }
 
   .form-box {
@@ -313,8 +258,4 @@ form {
   }
 
     .toggle-panel h1{font-size: 30px; }
-<<<<<<< HEAD
-} */
-=======
-}
->>>>>>> 3f274d1d1f6cd8654ecaca6a9bda5c41f3269b60
+}  */
