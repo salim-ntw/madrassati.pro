@@ -30,7 +30,7 @@ function Testimonials() {
   const goToPrev = () => {
     setCurrentIndex((prev) => (prev === 0 ? usersPov.length - 1 : prev - 1));
   };
-  //when click on the left arrow, it goes to prev  'usersPov.length - 1' it goes to the last item in the array
+  //when click on the left arrow, it goes to prev  'usersPov.length - 1' it goes to the last item in the array  shadow-blue-800/50
 
   const goToNext = () => {
     setCurrentIndex((prev) => (prev === usersPov.length - 1 ? 0 : prev + 1));
@@ -39,7 +39,7 @@ function Testimonials() {
   return (
     <div
       id="testimonials"
-      className="bg-[#0a1b4f] flex flex-col items-center py-12 px-6"
+      className="bg-[#0a1b4f]  flex flex-col items-center py-12 px-6"
     >
       <h1 className="text-3xl font-bold text-gray-200">Testimonials</h1>
       <h3 className="text-gray-400 text-center mt-2 mb-6">
@@ -59,7 +59,7 @@ function Testimonials() {
         {/* Active Testimonial Card */}
         <div
           key={currentIndex}
-          className="bg-white rounded-xl shadow-md p-8 w-[450px] text-center transition-all duration-500 ease-in-out transform hover:scale-105"
+          className="bg-white rounded-xl shadow-lg  p-8 w-[450px] text-center transition-all duration-500 ease-in-out transform hover:scale-105"
         >
           <img
             src={usersPov[currentIndex].img}
