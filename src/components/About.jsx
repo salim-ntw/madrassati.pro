@@ -69,7 +69,7 @@ function About() {
 
       <section className="py-16 px-6 bg-white">
         <div className="max-w-6xl mx-auto text-center">
-          <h2 className="text-3xl font-bold mb-4">About Our Services</h2>
+          <h2 className="text-3xl font-bold mb-4">Our Services</h2>
           <p className="text-gray-600 mb-12">
             Everything you need to connect schools, teachers, and parents in one
             secure platform.

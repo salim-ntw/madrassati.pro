@@ -67,7 +67,7 @@ const Register = () => {
 
         {/* right Side */}
         <div className="flex flex-col bg-gray-400 w-1/2 items-center justify-center gap-6 p-10">
-          <img src={logo} alt="logo" className="w-28" />
+          <img src={logo} alt="logo" className="w-40" />
           <div className="flex flex-col items-center text-center gap-2">
             <h1 className="text-white font-bold text-3xl">
               Welcome to Madrassati,

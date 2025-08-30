@@ -1,32 +1,56 @@
-import React from "react";
+import React, { useState } from "react";
 import logo from "../../assets/no-bg-logo.png";
-function Login() {
+
+const Auth = () => {
+  const [isLogin, setIsLogin] = useState(true);
+
   return (
-    <div className="bg-gradient-to-br from-blue-950 to-gray-400  flex items-center justify-center h-screen w-screen overflow-hidden">
-      <div className="bg-gradient-to-br from-blue-950 to-gray-400 flex items-center justify-center min-h-screen w-screen">
-        <div className="bg-white w-[90%] max-w-5xl flex rounded-xl shadow-lg overflow-hidden">
-          {/* Left Side */}
-          <div className="flex flex-col bg-gray-400 w-1/2 items-center justify-center gap-6 p-10">
-            <img src={logo} alt="logo" className="w-28" />
+    <div className="bg-gradient-to-br from-blue-950 to-gray-400 flex items-center justify-center min-h-screen w-screen overflow-hidden">
+      <div className="relative bg-white w-[90%] max-w-5xl h-[600px] rounded-xl shadow-lg overflow-hidden">
+        {/* Right Side - Image and Text */}
+        <div
+          className={`absolute top-0 h-full w-1/2 bg-gray-400 flex flex-col items-center justify-center gap-4 p-10 transition-transform duration-700 ease-in-out
+          ${isLogin ? "translate-x-0" : "translate-x-full"}`}
+        >
+          <img src={logo} alt="logo" className="w-40" />
+          {isLogin ? (
             <div className="flex flex-col items-center text-center gap-2">
               <h1 className="text-white font-bold text-3xl">Welcome Back,</h1>
               <p className="text-blue-950 text-sm">Don't have an account?</p>
               <button
-                onClick={() => (window.location.href = "/register")}
-                className="bg-blue-950 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-800 transition duration-300 cursor-pointer"
+                onClick={() => setIsLogin(false)}
+                className="bg-blue-950 text-white px-4 py-2  mt-2 rounded-lg text-sm hover:bg-blue-800 transition duration-300 cursor-pointer"
               >
                 Sign Up
               </button>
             </div>
-          </div>
+          ) : (
+            <div className="flex flex-col items-center text-center gap-2">
+              <h1 className="text-white font-bold text-3xl">
+                Welcome to Madrassati,
+              </h1>
+              <p className="text-blue-950 text-sm">Already have an account?</p>
+              <button
+                onClick={() => setIsLogin(true)}
+                className="bg-blue-950 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-800 transition duration-300 cursor-pointer"
+              >
+                Login
+              </button>
+            </div>
+          )}
+        </div>
 
-          {/* Right Side */}
-          <div className="w-1/2 flex items-center justify-center p-10">
+        {/* Forms Container */}
+        <div
+          className={`absolute top-0 h-full w-1/2 flex items-center justify-center p-10 transition-all duration-700 ease-in-out
+          ${isLogin ? "left-1/2" : "left-0"}`}
+        >
+          {isLogin ? (
+            
             <form className="flex flex-col w-full max-w-sm gap-4">
               <h2 className="text-2xl font-bold text-blue-950 text-center mb-4">
                 Login
               </h2>
-
               <input
                 type="text"
                 placeholder="Enter your email"
@@ -37,17 +61,14 @@ function Login() {
                 placeholder="Enter your password"
                 className="border border-gray-300 p-2 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
-
               <div className="flex justify-between items-center text-sm">
                 <label className="flex items-center gap-2">
-                  <input type="checkbox" className="w-4 h-4" />
-                  Remember me
+                  <input type="checkbox" className="w-4 h-4" /> Remember me
                 </label>
                 <a href="#" className="text-blue-700 hover:underline">
                   Forgot password?
                 </a>
               </div>
-
               <button
                 type="submit"
                 className="bg-blue-950 text-white py-2 rounded-md font-semibold hover:bg-blue-800 transition duration-300 cursor-pointer"
@@ -55,57 +76,64 @@ function Login() {
                 Login
               </button>
             </form>
-          </div>
+          ) : (
+            
+            <form className="flex flex-col w-full max-w-sm gap-4">
+              <h2 className="text-2xl font-bold text-blue-950 text-center mb-2">
+                Register
+              </h2>
+              <input
+                type="text"
+                placeholder="Full name"
+                className="border border-gray-300 p-2 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <input
+                type="email"
+                placeholder="Email"
+                className="border border-gray-300 p-2 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <div className="flex gap-4">
+                <input
+                  type="password"
+                  placeholder="Password"
+                  className="w-1/2 border border-gray-300 p-2 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                <input
+                  type="password"
+                  placeholder="Confirm Password"
+                  className="w-1/2 border border-gray-300 p-2 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+              <input
+                type="tel"
+                placeholder="Phone number"
+                className="border border-gray-300 p-2 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <div className="flex gap-4">
+                <select className="w-1/2 border border-gray-300 p-2 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                  <option value="">Select Gender</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                </select>
+                <select className="w-1/2 border border-gray-300 p-2 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                  <option value="">Register as</option>
+                  <option value="student">Student</option>
+                  <option value="teacher">Teacher</option>
+                  <option value="parent">Parent</option>
+                </select>
+              </div>
+              <button
+                type="submit"
+                className="bg-blue-950 text-white py-2 rounded font-semibold hover:bg-blue-800 transition duration-300 cursor-pointer"
+              >
+                Register
+              </button>
+            </form>
+          )}
         </div>
       </div>
     </div>
   );
-}
+};
 
-export default Login;
-
-{
-  /* <div className="bg-white w-1/3 h-[65%] flex flex-col items-center  rounded-xl gap-8">
-  <div className="text-center bg-blue-950 text-white w-full p-6 rounded-t-xl rounded-b-[40px] ">
-    <h1 className="font-bold text-2xl">Welcome back</h1>
-    <p className="text-gray-400">sign in to your account</p>
-  </div>
-  <div className="flex flex-col gap-4 w-[90%] ">
-    <div className="flex flex-col gap-1 ">
-      <label className="text-sm font-semibold text-gray-800 ">
-        {" "}
-        Email Address
-      </label>
-      <input
-        type="text"
-        placeholder="enter your email"
-        className="border-gray-300 border p-2 rounded-lg bg-gray-300"
-        // value={email}
-        // onChange={(e) => setEmail(e.target.value)}
-      />
-    </div>
-    <div className="flex flex-col gap-1 ">
-      <label className="text-sm font-semibold text-gray-800">Password</label>
-      <input
-        // value={password}
-        // onChange={(e) => setPassword(e.target.value)}
-        type="password"
-        placeholder="enyer your password"
-        className="border-gray-300 border p-2 rounded-lg bg-gray-300"
-      />
-    </div>
-    <button
-      // onClick={submit}
-      className="bg-blue-950 rounded-lg h-9 text-white text-sm font-semibold cursor-pointer"
-    >
-      Sign In
-    </button>
-    <p className="text-center text-gray-600">
-      Don't have an account ?{" "}
-      <a className="text-blue-950 font-semibold" href="/register">
-        Sign up
-      </a>
-    </p>
-  </div>
-</div>; */
-}
+export default Auth;

@@ -19,7 +19,7 @@ function Hero() {
           Stay connected to your child's school life anytime, anywhere.
         </p>
         <Link
-          to="/register"
+          to="/login"
           className="mt-6 bg-gray-500 hover:bg-gray-700 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition duration-300 cursor-pointer active:opacity-70"
         >
           Join Us

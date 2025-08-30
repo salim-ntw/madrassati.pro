@@ -15,17 +15,17 @@ export default function Pricing() {
         <Plan
           title="Starter"
           description="Perfect for small private schools or institutions starting their digital journey. 200 students."
-          price="20,000 DZD"
+          price="20,000 "
         />
         <Plan
           title="Growth"
           description="Ideal for mid-sized schools looking for advanced digital communication and management. 500 students."
-          price="40,000 DZD"
+          price="40,000 "
         />
         <Plan
           title="Premium"
           description="Designed for large educational institutions needing a robust and scalable platform. 1000 students."
-          price="58,000 DZD"
+          price="58,000 "
         />
       </div>
     </div>

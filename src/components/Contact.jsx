@@ -37,7 +37,7 @@ function Contact() {
   };
 
   return (
-    <div className="relative w-full">
+    <div id="contact" className="relative w-full">
       <div className="bg-[#0a1b4f] text-white flex flex-col items-center py-24 px-6">
         <h1 className="font-bold text-4xl mb-2">Contact Us</h1>
         <p className="text-gray-300 text-lg">

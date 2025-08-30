@@ -8,7 +8,7 @@ export default function Plan({ title, description, price }) {
       <h2 className="text-center font-bold text-3xl tracking-wide">{title}</h2>
       <p className="text-center text-gray-100 text-lg">{description}</p>
       <p className="text-center text-2xl font-semibold">
-        <span className="text-yellow-400">{price}</span>
+        <span className="text-yellow-400">{price} DA</span>
         <span className="text-sm text-gray-200"> /month</span>
       </p>
       <button className="mt-4 bg-yellow-400 text-blue-900 font-bold py-2 px-6 rounded-full shadow-md hover:bg-yellow-300 transition cursor-pointer">
