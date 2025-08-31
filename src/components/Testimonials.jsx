@@ -25,12 +25,11 @@ function Testimonials() {
     },
   ];
 
-  const [currentIndex, setCurrentIndex] = useState(0); //index 0
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   const goToPrev = () => {
     setCurrentIndex((prev) => (prev === 0 ? usersPov.length - 1 : prev - 1));
   };
-  //when click on the left arrow, it goes to prev  'usersPov.length - 1' it goes to the last item in the array  shadow-blue-800/50
 
   const goToNext = () => {
     setCurrentIndex((prev) => (prev === usersPov.length - 1 ? 0 : prev + 1));
@@ -39,15 +38,17 @@ function Testimonials() {
   return (
     <div
       id="testimonials"
-      className="bg-[#0a1b4f]  flex flex-col items-center py-12 px-6"
+      className="bg-[#0a1b4f] flex flex-col items-center py-12 px-4 sm:px-6"
     >
-      <h1 className="text-3xl font-bold text-gray-200">Testimonials</h1>
-      <h3 className="text-gray-400 text-center mt-2 mb-6">
+      <h1 className="text-3xl font-bold text-gray-200 text-center">
+        Testimonials
+      </h1>
+      <h3 className="text-gray-400 text-center mt-2 mb-6 text-base">
         Trusted by <span className="font-bold text-gray-200">Parents</span> and{" "}
         <span className="font-bold text-gray-200">Teachers</span>
       </h3>
 
-      <div className="flex items-center gap-6">
+      <div className="flex flex-col sm:flex-row items-center gap-6 w-full justify-center">
         {/* Left Arrow */}
         <button
           onClick={goToPrev}
@@ -59,7 +60,7 @@ function Testimonials() {
         {/* Active Testimonial Card */}
         <div
           key={currentIndex}
-          className="bg-white rounded-xl shadow-lg  p-8 w-[450px] text-center transition-all duration-500 ease-in-out transform hover:scale-105"
+          className="bg-white rounded-xl shadow-lg p-6 sm:p-8 w-full max-w-sm sm:max-w-md md:w-[450px] text-center transition-all duration-500 ease-in-out transform hover:scale-105"
         >
           <img
             src={usersPov[currentIndex].img}
