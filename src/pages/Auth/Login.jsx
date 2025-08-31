@@ -5,31 +5,37 @@ const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
 
   return (
-    <div className="bg-gradient-to-br from-blue-950 to-gray-400 flex items-center justify-center min-h-screen w-screen overflow-hidden">
-      <div className="relative bg-white w-[90%] max-w-5xl h-[600px] rounded-xl shadow-lg overflow-hidden">
+    <div className="bg-gradient-to-br from-blue-950 to-gray-400 flex items-center justify-center min-h-screen w-screen overflow-hidden px-4">
+      <div className="relative bg-white w-full max-w-5xl h-auto md:h-[500px] rounded-xl shadow-lg overflow-hidden flex flex-col md:flex-row">
         {/* Right Side - Image and Text */}
         <div
-          className={`absolute top-0 h-full w-1/2 bg-gray-400 flex flex-col items-center justify-center gap-4 p-10 transition-transform duration-700 ease-in-out
-          ${isLogin ? "translate-x-0" : "translate-x-full"}`}
+          className={`relative md:absolute top-0 md:h-full w-full md:w-1/2 bg-gray-400 flex flex-col items-center justify-center gap-4 p-8 md:p-10 transition-transform duration-700 ease-in-out
+          ${isLogin ? "translate-x-0" : "md:translate-x-full"}`}
         >
-          <img src={logo} alt="logo" className="w-40" />
+          <img src={logo} alt="logo" className="w-32 md:w-40" />
           {isLogin ? (
             <div className="flex flex-col items-center text-center gap-2">
-              <h1 className="text-white font-bold text-3xl">Welcome Back,</h1>
-              <p className="text-blue-950 text-sm">Don't have an account?</p>
+              <h1 className="text-white font-bold text-2xl md:text-3xl">
+                Welcome Back,
+              </h1>
+              <p className="text-blue-950 text-sm md:text-base">
+                Don't have an account?
+              </p>
               <button
                 onClick={() => setIsLogin(false)}
-                className="bg-blue-950 text-white px-4 py-2  mt-2 rounded-lg text-sm hover:bg-blue-800 transition duration-300 cursor-pointer"
+                className="bg-blue-950 text-white px-4 py-2 mt-2 rounded-lg text-sm hover:bg-blue-800 transition duration-300 cursor-pointer"
               >
                 Sign Up
               </button>
             </div>
           ) : (
             <div className="flex flex-col items-center text-center gap-2">
-              <h1 className="text-white font-bold text-3xl">
+              <h1 className="text-white font-bold text-2xl md:text-3xl">
                 Welcome to Madrassati,
               </h1>
-              <p className="text-blue-950 text-sm">Already have an account?</p>
+              <p className="text-blue-950 text-sm md:text-base">
+                Already have an account?
+              </p>
               <button
                 onClick={() => setIsLogin(true)}
                 className="bg-blue-950 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-800 transition duration-300 cursor-pointer"
@@ -42,11 +48,10 @@ const Auth = () => {
 
         {/* Forms Container */}
         <div
-          className={`absolute top-0 h-full w-1/2 flex items-center justify-center p-10 transition-all duration-700 ease-in-out
-          ${isLogin ? "left-1/2" : "left-0"}`}
+          className={`relative md:absolute top-0 md:h-full w-full md:w-1/2 flex items-center justify-center p-6 md:p-10 transition-all duration-700 ease-in-out
+          ${isLogin ? "md:left-1/2" : "md:left-0"}`}
         >
           {isLogin ? (
-            
             <form className="flex flex-col w-full max-w-sm gap-4">
               <h2 className="text-2xl font-bold text-blue-950 text-center mb-4">
                 Login
@@ -61,7 +66,7 @@ const Auth = () => {
                 placeholder="Enter your password"
                 className="border border-gray-300 p-2 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
-              <div className="flex justify-between items-center text-sm">
+              <div className="flex justify-between items-center text-sm flex-wrap gap-2">
                 <label className="flex items-center gap-2">
                   <input type="checkbox" className="w-4 h-4" /> Remember me
                 </label>
@@ -77,7 +82,6 @@ const Auth = () => {
               </button>
             </form>
           ) : (
-            
             <form className="flex flex-col w-full max-w-sm gap-4">
               <h2 className="text-2xl font-bold text-blue-950 text-center mb-2">
                 Register
@@ -92,16 +96,16 @@ const Auth = () => {
                 placeholder="Email"
                 className="border border-gray-300 p-2 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
-              <div className="flex gap-4">
+              <div className="flex gap-4 flex-col sm:flex-row">
                 <input
                   type="password"
                   placeholder="Password"
-                  className="w-1/2 border border-gray-300 p-2 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="sm:w-1/2 border border-gray-300 p-2 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 <input
                   type="password"
                   placeholder="Confirm Password"
-                  className="w-1/2 border border-gray-300 p-2 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="sm:w-1/2 border border-gray-300 p-2 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
               <input
@@ -109,13 +113,13 @@ const Auth = () => {
                 placeholder="Phone number"
                 className="border border-gray-300 p-2 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
-              <div className="flex gap-4">
-                <select className="w-1/2 border border-gray-300 p-2 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <div className="flex gap-4 flex-col sm:flex-row">
+                <select className="sm:w-1/2 border border-gray-300 p-2 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500">
                   <option value="">Select Gender</option>
                   <option value="male">Male</option>
                   <option value="female">Female</option>
                 </select>
-                <select className="w-1/2 border border-gray-300 p-2 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <select className="sm:w-1/2 border border-gray-300 p-2 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500">
                   <option value="">Register as</option>
                   <option value="student">Student</option>
                   <option value="teacher">Teacher</option>

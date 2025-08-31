@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import logo from "../assets/no-bg-logo.png";
-import { Menu, X } from "lucide-react"; // For hamburger icons
+import { Menu, X } from "lucide-react"; 
 
 function Nav() {
   const [isOpen, setIsOpen] = useState(false);
