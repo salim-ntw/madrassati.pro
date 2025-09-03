@@ -1,0 +1,58 @@
+import React from 'react'
+import profPic from '../../assets/graduated.png'
+import sched from "../../assets/icons/timetable.png"
+import grade from "../../assets/icons/grade.png"
+import homework from "../../assets/icons/homework.png"
+import announcement from "../../assets/icons/megaphone.png"
+import exam from "../../assets/icons/exam.png"
+import logout from "../../assets/icons/logout.png"
+import user from "../../assets/icons/user.png"
+
+export default function SideBar() {
+    const features = [
+        { name: 'Class Schedule', icon: sched },
+        { name: 'Grades', icon: grade },
+        { name: 'Homework', icon: homework },
+        { name: 'Exams', icon: exam },
+        { name: 'Announcements', icon: announcement },
+    ]
+
+    return (
+        <div className='flex flex-col gap-5 p-4 h-full'>
+            
+            {/* School name stays outside */}
+            <h1 className='text-xl font-bold text-blue-950 bg-white w-full pl-6 rounded-md shadow-sm'>
+                Schools name
+            </h1>
+
+            {/* Blue box with rounded corners */}
+            <div className='w-full bg-blue-900 flex flex-col text-white p-4 items-center justify-center h-full gap-10 rounded-md mt-2'>
+                
+                {/* Profile Section */}
+                <div className="flex flex-col items-center justify-center gap-3 bg-gray-300 text-black p-6 rounded-md shadow-md w-full max-w-xs">
+                    <img className="w-20 h-20 rounded-full object-cover border-2 border-blue-900 shadow" src={profPic} alt="profile" />
+                    <div className="flex items-center justify-center gap-2">
+                        <h1 className="font-bold text-lg">Student name</h1>
+                        <img className="w-4 h-4" src={user} alt="user" />
+                    </div>
+                </div>
+
+                {/* Features Section */}
+                <div className='flex flex-col gap-4 justify-center items-start'>
+                    {features.map((feature, i) => (
+                        <div key={i} className='flex flex-row items-center justify-center gap-2 cursor-pointer'>
+                            <img className='w-6' src={feature.icon} alt={feature.name} />
+                            <h1>{feature.name}</h1>
+                        </div>
+                    ))}
+                </div>
+
+                {/* Logout Button */}
+                <div className='flex flex-row items-center justify-center gap-2 cursor-pointer mt-auto bg-gray-300 p-1 rounded-md shadow-md'>
+                    <img className='w-6' src={logout} alt="logout" />
+                    <button className='text-black font-medium cursor-pointer'>Logout</button>
+                </div>
+            </div>
+        </div>
+    )
+}
