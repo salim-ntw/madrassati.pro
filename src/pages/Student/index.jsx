@@ -2,6 +2,7 @@ import React from "react";
 import SideBar from "./SideBar";
 import Welcome from "./Welcome";
 import Highlight from "./Highlight";
+import { Outlet } from "react-router-dom";
 
 function Index() {
   return (
@@ -13,8 +14,7 @@ function Index() {
 
       {/* Main Content - 9/12 width */}
       <div className="col-span-9 p-6 flex flex-col gap-6 ">
-        <Welcome />
-        <Highlight />
+        <Outlet />
       </div>
     </div>
   );

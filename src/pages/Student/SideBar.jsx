@@ -7,14 +7,15 @@ import announcement from "../../assets/icons/megaphone.png"
 import exam from "../../assets/icons/exam.png"
 import logout from "../../assets/icons/logout.png"
 import user from "../../assets/icons/user.png"
+import { Link } from "react-router-dom"; 
 
 export default function SideBar() {
     const features = [
-        { name: 'Class Schedule', icon: sched },
-        { name: 'Grades', icon: grade },
-        { name: 'Homework', icon: homework },
-        { name: 'Exams', icon: exam },
-        { name: 'Announcements', icon: announcement },
+        { name: 'Class Schedule', icon: sched, path: '/student/schedule' },
+        { name: 'Grades', icon: grade, path: '/student/grades' },
+        { name: 'Homework', icon: homework, path: '/student/homework' },
+        { name: 'Exams', icon: exam , path: '/student/exams'},
+        { name: 'Announcements', icon: announcement, path: '/student/announcements' },
     ]
 
     return (
@@ -38,12 +39,16 @@ export default function SideBar() {
                 </div>
 
                 {/* Features Section */}
-                <div className='flex flex-col gap-4 justify-center items-start'>
+               <div className='flex flex-col gap-4 justify-center items-start w-full'>
                     {features.map((feature, i) => (
-                        <div key={i} className='flex flex-row items-center justify-center gap-2 cursor-pointer'>
-                            <img className='w-6' src={feature.icon} alt={feature.name} />
-                            <h1>{feature.name}</h1>
-                        </div>
+                        <Link 
+                        key={i} 
+                        to={feature.path} 
+                        className='flex flex-row items-center gap-2 cursor-pointer hover:text-gray-200 px-2 py-1 rounded-md w-full'
+                        >
+                        <img className='w-6' src={feature.icon} alt={feature.name} />
+                        <span>{feature.name}</span>
+                        </Link>
                     ))}
                 </div>
 
