@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function Schedule() {
+export default function ClassSched() {
   // Example weekly timetable data
   const timetable = {
     Monday: [
