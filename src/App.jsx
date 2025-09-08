@@ -12,6 +12,7 @@ import Grades from "./pages/Student/Grades.jsx";
 import Homework from "./pages/Student/Homework.jsx";
 import Exams from "./pages/Student/Exams.jsx";
 import Announcements from "./pages/Student/Announcement.jsx";
+import Profile from "./pages/Student/Profile.jsx";
 const App = () => {
   return (
     <Router>
@@ -24,7 +25,8 @@ const App = () => {
         <Route path ="/student" element={<Student />} />
 
          {/* default page when visiting /student */}
-          <Route index element={<div>Welcome + Highlights</div>} />
+          {/* <Route index element={<div>Welcome + Highlights</div>} /> */}
+          <Route path="/student/profile" element={<Profile />} />
           <Route path="/student/schedule" element={<ClassSchedule />} />
           <Route path="/student/grades" element={<Grades />} />
           <Route path="/student/homework" element={<Homework />} />
