@@ -10,14 +10,14 @@ import user from "../../assets/icons/user.png"
 import home from "../../assets/icons/home.png"
 import { Link } from "react-router-dom"; 
 
-export default function SideBar() {
+export default function SideBar({ setSelectedTab }) {
     const features = [
-        { name: 'Home', icon: home, path: '/student' },
-        { name: 'Class Schedule', icon: sched, path: '/student/schedule' },
-        { name: 'Grades', icon: grade, path: '/student/grades' },
-        { name: 'Homework', icon: homework, path: '/student/homework' },
-        { name: 'Exams', icon: exam , path: '/student/exams'},
-        { name: 'Announcements', icon: announcement, path: '/student/announcements' },
+        { name: 'Home', icon: home, key: '' },
+        { name: 'Class Schedule', icon: sched, key: 'schedule' },
+        { name: 'Grades', icon: grade, key: 'grades' },
+        { name: 'Homework', icon: homework, key: 'homework' },
+        { name: 'Exams', icon: exam , key: 'exams'},
+        { name: 'Announcements', icon: announcement, key: 'announcements' },
     ]
 
     return (
@@ -50,14 +50,14 @@ export default function SideBar() {
                 {/* Features Section */}
                <div className='flex flex-col gap-4 justify-center items-start w-full'>
                     {features.map((feature, i) => (
-                        <Link 
+                        <button 
                         key={i} 
-                        to={feature.path} 
+                        onClick={() => setSelectedTab(feature.key)} 
                         className='flex flex-row items-center gap-2 cursor-pointer hover:text-gray-200 px-2 py-1 rounded-md w-full'
                         >
                         <img className='w-6' src={feature.icon} alt={feature.name} />
                         <span>{feature.name}</span>
-                        </Link>
+                        </button>
                     ))}
                 </div>
 

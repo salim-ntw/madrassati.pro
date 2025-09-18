@@ -5,6 +5,8 @@ import Home from "./pages/home/index.jsx";
 import Register from "./pages/Auth/Register.jsx";
 import Login from "./pages/Auth/Login.jsx";
 import Student from "./pages/Student/index.jsx";
+import Parent from "./pages/Parent/index.jsx";
+import Teacher from "./pages/Teacher/index.jsx";
 
 //student sub pages
 import ClassSchedule from "./pages/Student/ClassSched.jsx";
@@ -23,6 +25,8 @@ const App = () => {
         <Route path="/Login" element={<Login />} />
         {/* Example: <Route path="/profile" element={<Profile />} /> */}
         <Route path ="/student" element={<Student />} />
+        <Route path ="/parent" element={<Parent />} />
+        <Route path ="/teacher" element={<Teacher />} />
 
          {/* default page when visiting /student */}
           {/* <Route index element={<div>Welcome + Highlights</div>} /> */}

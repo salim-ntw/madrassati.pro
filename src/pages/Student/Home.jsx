@@ -4,7 +4,7 @@ import Highlight from './Highlight'
 
 export default function Home() {
   return (
-    <div>
+    <div className='flex flex-col gap-6'>
 
         <Welcome />
         <Highlight />
