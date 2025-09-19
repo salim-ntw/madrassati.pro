@@ -1,32 +1,60 @@
 import React from "react";
 import Plan from "./Plan";
+import { useLanguage } from "../contexts/LanguageContext";
 
 export default function Pricing() {
+  const { t, language } = useLanguage();
+  
   return (
     <div
       id="pricing"
-      className="flex flex-col items-center py-12 px-6 m-2 bg-white  border-blue-900 border-2 rounded-xl"
+      className="bg-gradient-to-br from-gray-50 to-blue-50 py-20 px-6 relative overflow-hidden"
     >
-      <h1 className="text-3xl text-gray-800 font-bold text-center">Plans</h1>
-      <h3 className="text-gray-700 mb-12">
-        Affordable plans designed for every school’s needs.
-      </h3>
-      <div className="grid gap-8 grid-cols-1 md:grid-cols-3 ">
-        <Plan
-          title="Starter"
-          description="Perfect for small private schools or institutions starting their digital journey. 200 students."
-          price="20,000 "
-        />
-        <Plan
-          title="Growth"
-          description="Ideal for mid-sized schools looking for advanced digital communication and management. 500 students."
-          price="40,000 "
-        />
-        <Plan
-          title="Premium"
-          description="Designed for large educational institutions needing a robust and scalable platform. 1000 students."
-          price="58,000 "
-        />
+      {/* Background Elements */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute top-20 left-10 w-32 h-32 bg-blue-100/30 rounded-full animate-pulse"></div>
+        <div className="absolute top-40 right-20 w-24 h-24 bg-blue-100/30 rounded-full animate-pulse" style={{animationDelay: '1s'}}></div>
+        <div className="absolute bottom-40 left-20 w-20 h-20 bg-blue-100/30 rounded-full animate-pulse" style={{animationDelay: '2s'}}></div>
+        <div className="absolute bottom-20 right-10 w-28 h-28 bg-blue-100/30 rounded-full animate-pulse" style={{animationDelay: '0.5s'}}></div>
+      </div>
+
+      <div className="max-w-7xl mx-auto relative z-10">
+        <div className="text-center mb-16 animate-fadeIn">
+          <h1 className={`text-4xl md:text-5xl text-gray-800 font-bold mb-6 animate-slideInDown ${language === 'ar' ? 'font-arabic' : ''}`}>
+            Pricing Plans
+          </h1>
+          <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-blue-700 mx-auto rounded-full mb-6 animate-slideInUp" style={{animationDelay: '0.2s'}}></div>
+          <p className={`text-gray-600 text-lg md:text-xl max-w-3xl mx-auto animate-slideInUp ${language === 'ar' ? 'font-arabic' : ''}`} style={{animationDelay: '0.3s'}}>
+            Affordable plans designed for every school's needs. Choose the perfect plan for your educational institution.
+          </p>
+        </div>
+        
+        <div className="grid gap-8 grid-cols-1 md:grid-cols-3">
+          <div className="animate-slideInUp" style={{animationDelay: '0.4s'}}>
+            <Plan
+              title="Starter"
+              description="Perfect for small private schools or institutions starting their digital journey. 200 students."
+              price="20,000"
+              popular={false}
+            />
+          </div>
+          <div className="animate-slideInUp" style={{animationDelay: '0.5s'}}>
+            <Plan
+              title="Growth"
+              description="Ideal for mid-sized schools looking for advanced digital communication and management. 500 students."
+              price="40,000"
+              popular={true}
+            />
+          </div>
+          <div className="animate-slideInUp" style={{animationDelay: '0.6s'}}>
+            <Plan
+              title="Premium"
+              description="Designed for large educational institutions needing a robust and scalable platform. 1000 students."
+              price="58,000"
+              popular={false}
+            />
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -24,8 +24,8 @@ export default function Attendance() {
   const current = classes.find(c => c.name === activeClass)
 
   return (
-    <div className='p-6'>
-      <h2 className='text-2xl font-bold mb-4'>Attendance</h2>
+    <div className='p-6 animate-fadeIn'>
+      <h2 className='text-2xl font-bold mb-4 animate-slideInDown'>Attendance</h2>
 
       <div className='flex gap-2 mb-4 flex-wrap'>
         {classes.map((c) => (

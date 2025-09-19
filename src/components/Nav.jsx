@@ -1,118 +1,163 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import logo from "../assets/no-bg-logo.png";
-import { Menu, X } from "lucide-react"; 
+import { Menu, X } from "lucide-react";
+import { useLanguage } from "../contexts/LanguageContext";
+import LanguageSwitcher from "./LanguageSwitcher"; 
 
 function Nav() {
   const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const { t, language } = useLanguage();
+
+  React.useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
-    <div className="flex justify-between items-center w-full bg-white px-6 shadow-sm h-[80px] fixed top-0 z-50">
+    <div className={`flex justify-between items-center w-full px-6 h-[80px] fixed top-0 z-50 transition-all duration-300 ${
+      scrolled 
+        ? 'bg-white/95 backdrop-blur-md shadow-lg border-b border-gray-200' 
+        : 'bg-white shadow-sm'
+    }`}>
       {/* Logo */}
-      <a href="#">
+      <a href="#" className="transform hover:scale-105 transition-transform duration-300">
         <img src={logo} alt="logo" className="w-24 h-auto" />
       </a>
 
       {/* Desktop Menu */}
-      <ul className="hidden md:flex flex-row gap-12 text-lg font-semibold">
+      <ul className="hidden md:flex flex-row gap-6 text-lg font-semibold items-center">
         <li>
           <a
             href="#hero"
-            className="text-gray-800 hover:text-[#0a1b4f] border-b-2 border-transparent hover:border-[#0a1b4f] transition duration-300"
+            className="text-gray-800 hover:text-blue-600 border-b-2 border-transparent hover:border-blue-600 transition-all duration-300 transform hover:scale-105"
           >
-            Home
+            {t('home')}
           </a>
         </li>
         <li>
           <a
             href="#about"
-            className="text-gray-800 hover:text-[#0a1b4f] border-b-2 border-transparent hover:border-[#0a1b4f] transition duration-300"
+            className="text-gray-800 hover:text-blue-600 border-b-2 border-transparent hover:border-blue-600 transition-all duration-300 transform hover:scale-105"
           >
-            About
+            {t('about')}
           </a>
         </li>
         <li>
           <a
             href="#pricing"
-            className="text-gray-800 hover:text-[#0a1b4f] border-b-2 border-transparent hover:border-[#0a1b4f] transition duration-300"
+            className="text-gray-800 hover:text-blue-600 border-b-2 border-transparent hover:border-blue-600 transition-all duration-300 transform hover:scale-105"
           >
-            Pricing
+            {t('pricing')}
           </a>
         </li>
         <li>
           <a
             href="#testimonials"
-            className="text-gray-800 hover:text-[#0a1b4f] border-b-2 border-transparent hover:border-[#0a1b4f] transition duration-300"
+            className="text-gray-800 hover:text-blue-600 border-b-2 border-transparent hover:border-blue-600 transition-all duration-300 transform hover:scale-105"
           >
-            Testimonials
+            {t('testimonials')}
           </a>
         </li>
         <li>
           <a
             href="#contact"
-            className="text-gray-800 hover:text-[#0a1b4f] border-b-2 border-transparent hover:border-[#0a1b4f] transition duration-300"
+            className="text-gray-800 hover:text-blue-600 border-b-2 border-transparent hover:border-blue-600 transition-all duration-300 transform hover:scale-105"
           >
-            Contact
+            {t('contact')}
           </a>
+        </li>
+        <li>
+          <LanguageSwitcher />
         </li>
         <li>
           <Link
             to="/login"
-            className="bg-[#0a1b4f] text-white px-4 py-2 rounded-xl hover:bg-gray-500 transition duration-300"
+            className="bg-gradient-to-r from-blue-600 to-blue-800 text-white px-6 py-2 rounded-xl hover:from-blue-700 hover:to-blue-900 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
           >
-            Login
+            {t('login')}
           </Link>
         </li>
       </ul>
 
       {/* Mobile Menu Button */}
       <div className="md:hidden">
-        <button onClick={() => setIsOpen(!isOpen)}>
-          {isOpen ? <X size={28} /> : <Menu size={28} />}
+        <button 
+          onClick={() => setIsOpen(!isOpen)}
+          className="p-2 rounded-lg hover:bg-gray-100 transition-colors duration-300"
+        >
+          {isOpen ? <X size={28} className="text-gray-800" /> : <Menu size={28} className="text-gray-800" />}
         </button>
       </div>
 
       {/* Mobile Dropdown Menu */}
-      {isOpen && (
-        <div className="absolute top-[80px] left-0 w-full bg-white shadow-lg md:hidden transition-all duration-300">
-          <ul className="flex flex-col items-center gap-6 py-6 text-lg font-semibold">
-            <li>
-              <a href="#hero" onClick={() => setIsOpen(false)}>
-                Home
-              </a>
-            </li>
-            <li>
-              <a href="#about" onClick={() => setIsOpen(false)}>
-                About
-              </a>
-            </li>
-            <li>
-              <a href="#pricing" onClick={() => setIsOpen(false)}>
-                Pricing
-              </a>
-            </li>
-            <li>
-              <a href="#testimonials" onClick={() => setIsOpen(false)}>
-                Testimonials
-              </a>
-            </li>
-            <li>
-              <a href="#contact" onClick={() => setIsOpen(false)}>
-                Contact
-              </a>
-            </li>
-            <li>
-              <Link
-                to="/login"
-                className="bg-[#0a1b4f] text-white px-4 py-2 rounded-xl hover:bg-gray-500 transition duration-300"
-                onClick={() => setIsOpen(false)}
-              >
-                Login
-              </Link>
-            </li>
-          </ul>
-        </div>
-      )}
+      <div className={`absolute top-[80px] left-0 w-full bg-white/95 backdrop-blur-md shadow-lg md:hidden transition-all duration-300 transform ${
+        isOpen ? 'translate-y-0 opacity-100' : '-translate-y-4 opacity-0 pointer-events-none'
+      }`}>
+        <ul className="flex flex-col items-center gap-6 py-6 text-lg font-semibold">
+          <li>
+            <a 
+              href="#hero" 
+              onClick={() => setIsOpen(false)}
+              className="text-gray-800 hover:text-blue-600 transition-colors duration-300 transform hover:scale-105"
+            >
+              {t('home')}
+            </a>
+          </li>
+          <li>
+            <a 
+              href="#about" 
+              onClick={() => setIsOpen(false)}
+              className="text-gray-800 hover:text-blue-600 transition-colors duration-300 transform hover:scale-105"
+            >
+              {t('about')}
+            </a>
+          </li>
+          <li>
+            <a 
+              href="#pricing" 
+              onClick={() => setIsOpen(false)}
+              className="text-gray-800 hover:text-blue-600 transition-colors duration-300 transform hover:scale-105"
+            >
+              {t('pricing')}
+            </a>
+          </li>
+          <li>
+            <a 
+              href="#testimonials" 
+              onClick={() => setIsOpen(false)}
+              className="text-gray-800 hover:text-blue-600 transition-colors duration-300 transform hover:scale-105"
+            >
+              {t('testimonials')}
+            </a>
+          </li>
+          <li>
+            <a 
+              href="#contact" 
+              onClick={() => setIsOpen(false)}
+              className="text-gray-800 hover:text-blue-600 transition-colors duration-300 transform hover:scale-105"
+            >
+              {t('contact')}
+            </a>
+          </li>
+          <li>
+            <LanguageSwitcher className="mb-2" />
+          </li>
+          <li>
+            <Link
+              to="/login"
+              className="bg-gradient-to-r from-blue-600 to-blue-800 text-white px-6 py-2 rounded-xl hover:from-blue-700 hover:to-blue-900 transition-all duration-300 transform hover:scale-105 shadow-lg"
+              onClick={() => setIsOpen(false)}
+            >
+              {t('login')}
+            </Link>
+          </li>
+        </ul>
+      </div>
     </div>
   );
 }

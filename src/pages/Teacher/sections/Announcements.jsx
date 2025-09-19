@@ -1,203 +1,275 @@
 import React from 'react'
 
-export default function CreateStudents() {
-  const [classes, setClasses] = React.useState([
-    { name: '1A', students: [
-      { id: 'S001', fullName: 'Alice Martin', email: 'alice@example.com' },
-      { id: 'S002', fullName: 'Bob Karim', email: 'bob@example.com' },
-    ]},
-    { name: '1B', students: [
-      { id: 'S010', fullName: 'David Ben', email: 'david@example.com' },
-      { id: 'S011', fullName: 'Eva Noor', email: 'eva@example.com' },
-    ]},
+export default function Announcements() {
+  const [announcements, setAnnouncements] = React.useState([
+    { 
+      id: 'A001', 
+      title: 'Math Test Next Week', 
+      content: 'There will be a mathematics test next week covering chapters 1-3. Please study the exercises we did in class.', 
+      date: '2025-01-20', 
+      targetAudience: 'All Classes',
+      priority: 'high'
+    },
+    { 
+      id: 'A002', 
+      title: 'Science Project Deadline', 
+      content: 'The science project about photosynthesis is due next Friday. Make sure to include diagrams and explanations.', 
+      date: '2025-01-18', 
+      targetAudience: 'Class 1B',
+      priority: 'medium'
+    },
+    { 
+      id: 'A003', 
+      title: 'Parent-Teacher Meeting', 
+      content: 'Parent-teacher meetings are scheduled for next month. Please check your emails for the schedule.', 
+      date: '2025-01-15', 
+      targetAudience: 'All Parents',
+      priority: 'low'
+    }
   ])
 
   const [showAdd, setShowAdd] = React.useState(false)
-  const [form, setForm] = React.useState({ fullName: '', id: '', className: '', email: '', password: '' })
+  const [showEdit, setShowEdit] = React.useState(false)
   const [showDelete, setShowDelete] = React.useState(false)
-  const [pendingDelete, setPendingDelete] = React.useState({ className: '', id: '' })
+  const [selectedId, setSelectedId] = React.useState('')
+  const [form, setForm] = React.useState({ title: '', content: '', date: '', targetAudience: '', priority: 'medium' })
+  const [editForm, setEditForm] = React.useState({ id: '', title: '', content: '', date: '', targetAudience: '', priority: 'medium' })
 
   const handleChange = (e) => {
     const { name, value } = e.target
     setForm((f) => ({ ...f, [name]: value }))
   }
 
-  const handleGeneratePassword = () => {
-    const pwd = Math.random().toString(36).slice(-10)
-    setForm((f) => ({ ...f, password: pwd }))
-  }
-
-  const handleAdd = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault()
-    if (!form.fullName || !form.id || !form.className || !form.email || !form.password) return
-    setClasses((cls) => cls.map(c => c.name === form.className ? { ...c, students: [...c.students, { id: form.id, fullName: form.fullName, email: form.email }] } : c))
-    setForm({ fullName: '', id: '', className: '', email: '', password: '' })
+    if (!form.title || !form.content || !form.date || !form.targetAudience) return
+    
+    const id = 'A' + String(Math.floor(Math.random()*10000)).padStart(3,'0')
+    setAnnouncements((ann) => [...ann, { id, ...form }])
+    setForm({ title: '', content: '', date: '', targetAudience: '', priority: 'medium' })
     setShowAdd(false)
   }
 
-  const handleDelete = (className, id) => {
-    setPendingDelete({ className, id })
+  const editAnnouncement = (announcement) => {
+    setEditForm({ ...announcement })
+    setShowEdit(true)
+  }
+
+  const saveEdit = (e) => {
+    e.preventDefault()
+    if (!editForm.title || !editForm.content || !editForm.date || !editForm.targetAudience) return
+    
+    setAnnouncements((ann) => ann.map((a) => a.id === editForm.id ? { ...editForm } : a))
+    setShowEdit(false)
+  }
+
+  const deleteAnnouncement = (id) => {
+    setSelectedId(id)
     setShowDelete(true)
   }
 
-  const [editing, setEditing] = React.useState({ id: null, className: '' })
-  const [editForm, setEditForm] = React.useState({ fullName: '', email: '' })
-
-  const startEdit = (className, st) => {
-    setEditing({ id: st.id, className })
-    setEditForm({ fullName: st.fullName, email: st.email })
+  const confirmDelete = () => {
+    setAnnouncements((ann) => ann.filter((a) => a.id !== selectedId))
+    setShowDelete(false)
+    setSelectedId('')
   }
 
-  const saveEdit = () => {
-    setClasses((cls) => cls.map(c => c.name === editing.className ? {
-      ...c,
-      students: c.students.map(st => st.id === editing.id ? { ...st, fullName: editForm.fullName, email: editForm.email } : st)
-    } : c))
-    setEditing({ id: null, className: '' })
+  const getPriorityColor = (priority) => {
+    switch (priority) {
+      case 'high': return 'bg-red-100 text-red-800 border-red-200'
+      case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200'
+      case 'low': return 'bg-green-100 text-green-800 border-green-200'
+      default: return 'bg-gray-100 text-gray-800 border-gray-200'
+    }
+  }
+
+  const getPriorityIcon = (priority) => {
+    switch (priority) {
+      case 'high': return '🔴'
+      case 'medium': return '🟡'
+      case 'low': return '🟢'
+      default: return '⚪'
+    }
   }
 
   return (
-    <div className='page-container py-6'>
-      <div className='flex items-center justify-between mb-4'>
-        <h2 className='text-2xl font-bold'>Students</h2>
-        <button onClick={() => setShowAdd(true)} className='px-4 py-2 rounded-md bg-blue-900 text-white hover:bg-blue-800'>Add Student</button>
-      </div>
+    <div className='p-6 animate-fadeIn'>
+      <h1 className='text-3xl font-bold text-gray-800 mb-6 animate-slideInDown'>Announcements</h1>
 
-      <div className='space-y-6'>
-        {classes.map((c) => (
-          <div key={c.name} className='card p-0'>
-            <div className='px-6 py-4 border-b border-white/10 flex items-center justify-between'>
-              <div className='text-lg font-semibold'>Class {c.name}</div>
-              <span className='text-sm text-slate-300'>{c.students.length} students</span>
-            </div>
-            <div className='table-wrap'>
-              <table className='table'>
-                <thead className='thead'>
-                  <tr className='thead-row'>
-                    <th className='p-3 text-left'>ID</th>
-                    <th className='p-3 text-left'>Full name</th>
-                    <th className='p-3 text-left'>Email</th>
-                    <th className='p-3 text-left'>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {c.students.map((st, idx) => (
-                    <tr key={st.id} className={`tbody-row`}>
-                      <td className='p-3 font-semibold'>{st.id}</td>
-                      <td className='p-3'>
-                        {editing.id === st.id && editing.className === c.name ? (
-                          <input className='input' value={editForm.fullName} onChange={(e)=>setEditForm({...editForm, fullName: e.target.value})} />
-                        ) : st.fullName}
-                      </td>
-                      <td className='p-3'>
-                        {editing.id === st.id && editing.className === c.name ? (
-                          <input className='input' value={editForm.email} onChange={(e)=>setEditForm({...editForm, email: e.target.value})} />
-                        ) : st.email}
-                      </td>
-                      <td className='p-3'>
-                        {editing.id === st.id && editing.className === c.name ? (
-                          <div className='flex gap-2'>
-                            <button onClick={saveEdit} className='btn-success'>Save</button>
-                            <button onClick={()=>setEditing({ id: null, className: '' })} className='btn-secondary'>Cancel</button>
-                          </div>
-                        ) : (
-                          <div className='flex gap-2'>
-                            <button onClick={()=>startEdit(c.name, st)} className='btn-warning'>Edit</button>
-                            <button onClick={()=>handleDelete(c.name, st.id)} className='btn-danger'>Delete</button>
-                          </div>
-                        )}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+      <div className='bg-white rounded-xl shadow-lg overflow-hidden animate-slideInUp'>
+        <div className='bg-gradient-to-r from-purple-600 to-purple-800 text-white p-4'>
+          <div className='flex items-center justify-between'>
+            <h2 className='text-xl font-semibold'>Manage Announcements</h2>
+            <button onClick={() => setShowAdd(true)} className='bg-white text-purple-600 px-4 py-2 rounded-lg font-medium hover:bg-gray-100 transition-all duration-300 transform hover:scale-105'>
+              + Add Announcement
+            </button>
           </div>
-        ))}
+        </div>
+
+        <div className='p-6'>
+          <div className='grid gap-4'>
+            {announcements.map((announcement, index) => (
+              <div key={announcement.id} className='border border-gray-200 rounded-lg p-4 hover:shadow-md transition-all duration-300 transform hover:scale-[1.02] animate-slideInUp' style={{animationDelay: `${index * 0.1}s`}}>
+                <div className='flex items-start justify-between mb-3'>
+                  <div className='flex-1'>
+                    <div className='flex items-center gap-3 mb-2'>
+                      <h3 className='text-lg font-semibold text-gray-800'>{announcement.title}</h3>
+                      <span className={`px-2 py-1 rounded-full text-xs font-medium border ${getPriorityColor(announcement.priority)}`}>
+                        {getPriorityIcon(announcement.priority)} {announcement.priority}
+                      </span>
+                    </div>
+                    <p className='text-gray-600 mb-3'>{announcement.content}</p>
+                    <div className='flex items-center gap-4 text-sm text-gray-500'>
+                      <span>📅 {new Date(announcement.date).toLocaleDateString()}</span>
+                      <span>👥 {announcement.targetAudience}</span>
+                    </div>
+                  </div>
+                  <div className='flex gap-2 ml-4'>
+                    <button onClick={() => editAnnouncement(announcement)} className='px-3 py-1 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-all duration-300 transform hover:scale-105 text-sm'>
+                      Edit
+                    </button>
+                    <button onClick={() => deleteAnnouncement(announcement.id)} className='px-3 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all duration-300 transform hover:scale-105 text-sm'>
+                      Delete
+                    </button>
+                  </div>
+                </div>
+                <div className='text-xs text-gray-500'>ID: {announcement.id}</div>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
 
+      {/* Add Announcement Modal */}
       {showAdd && (
-        <div className='modal-overlay'>
-          <div className='modal'>
-            <h3 className='text-xl font-semibold mb-4'>Register New Student</h3>
-            <form onSubmit={handleAdd} className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+        <div className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 animate-fadeIn'>
+          <div className='bg-white rounded-xl p-6 w-full max-w-2xl mx-4 animate-slideInUp'>
+            <h3 className='text-xl font-semibold mb-4'>Add Announcement</h3>
+            <form onSubmit={handleSubmit} className='space-y-4'>
               <div>
-                <label className='label'>Full name</label>
-                <input name='fullName' value={form.fullName} onChange={handleChange} className='input' />
+                <label className='block text-sm font-medium text-gray-700 mb-1'>Title</label>
+                <input name='title' value={form.title} onChange={handleChange} className='w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all duration-300' required />
               </div>
+              
               <div>
-                <label className='label'>ID</label>
-                <input name='id' value={form.id} onChange={handleChange} className='input' />
+                <label className='block text-sm font-medium text-gray-700 mb-1'>Content</label>
+                <textarea name='content' value={form.content} onChange={handleChange} rows={4} className='w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all duration-300' required />
               </div>
-              <div>
-                <label className='label'>Class</label>
-                <input name='className' value={form.className} onChange={handleChange} className='input' />
-              </div>
-              <div>
-                <label className='label'>Email</label>
-                <input name='email' type='email' value={form.email} onChange={handleChange} className='input' />
-              </div>
-              <div className='md:col-span-2'>
-                <label className='label'>Password</label>
-                <div className='flex gap-2'>
-                  <input name='password' value={form.password} onChange={handleChange} className='input flex-1' />
-                  <button type='button' onClick={handleGeneratePassword} className='btn-secondary'>Generate</button>
+              
+              <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+                <div>
+                  <label className='block text-sm font-medium text-gray-700 mb-1'>Date</label>
+                  <input type='date' name='date' value={form.date} onChange={handleChange} className='w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all duration-300' required />
+                </div>
+                <div>
+                  <label className='block text-sm font-medium text-gray-700 mb-1'>Target Audience</label>
+                  <select name='targetAudience' value={form.targetAudience} onChange={handleChange} className='w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all duration-300' required>
+                    <option value=''>Select audience</option>
+                    <option value='All Classes'>All Classes</option>
+                    <option value='Class 1A'>Class 1A</option>
+                    <option value='Class 1B'>Class 1B</option>
+                    <option value='Class 2A'>Class 2A</option>
+                    <option value='Class 3B'>Class 3B</option>
+                    <option value='All Parents'>All Parents</option>
+                    <option value='All Students'>All Students</option>
+                  </select>
                 </div>
               </div>
-              <div className='md:col-span-2 flex justify-end gap-2'>
-                <button type='button' onClick={()=>setShowAdd(false)} className='btn-secondary'>Cancel</button>
-                <button type='submit' className='btn-primary'>Add Student</button>
+              
+              <div>
+                <label className='block text-sm font-medium text-gray-700 mb-1'>Priority</label>
+                <select name='priority' value={form.priority} onChange={handleChange} className='w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all duration-300'>
+                  <option value='low'>Low Priority</option>
+                  <option value='medium'>Medium Priority</option>
+                  <option value='high'>High Priority</option>
+                </select>
+              </div>
+              
+              <div className='flex justify-end gap-2 pt-4'>
+                <button type='button' onClick={()=>setShowAdd(false)} className='px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-all duration-300 transform hover:scale-105'>
+                  Cancel
+                </button>
+                <button type='submit' className='px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-all duration-300 transform hover:scale-105'>
+                  Add Announcement
+                </button>
               </div>
             </form>
           </div>
         </div>
       )}
 
-      {showDelete && (
-        <div className='modal-overlay'>
-          <div className='modal max-w-lg'>
-            <h3 className='text-lg font-semibold mb-3'>Delete Student</h3>
-            <p className='text-gray-700 mb-4'>Are you sure you want to delete this student?</p>
-            <div className='flex justify-end gap-2'>
-              <button onClick={()=>setShowDelete(false)} className='btn-secondary'>Cancel</button>
-              <button onClick={()=>{setClasses((cls)=>cls.map(c=>c.name===pendingDelete.className?{...c,students:c.students.filter(st=>st.id!==pendingDelete.id)}:c)); setShowDelete(false)}} className='btn-danger'>Delete</button>
-            </div>
+      {/* Edit Announcement Modal */}
+      {showEdit && (
+        <div className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 animate-fadeIn'>
+          <div className='bg-white rounded-xl p-6 w-full max-w-2xl mx-4 animate-slideInUp'>
+            <h3 className='text-xl font-semibold mb-4'>Edit Announcement</h3>
+            <form onSubmit={saveEdit} className='space-y-4'>
+              <div>
+                <label className='block text-sm font-medium text-gray-700 mb-1'>Title</label>
+                <input name='title' value={editForm.title} onChange={(e)=>setEditForm({...editForm,title:e.target.value})} className='w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all duration-300' required />
+              </div>
+              
+              <div>
+                <label className='block text-sm font-medium text-gray-700 mb-1'>Content</label>
+                <textarea name='content' value={editForm.content} onChange={(e)=>setEditForm({...editForm,content:e.target.value})} rows={4} className='w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all duration-300' required />
+              </div>
+              
+              <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+                <div>
+                  <label className='block text-sm font-medium text-gray-700 mb-1'>Date</label>
+                  <input type='date' name='date' value={editForm.date} onChange={(e)=>setEditForm({...editForm,date:e.target.value})} className='w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all duration-300' required />
+                </div>
+                <div>
+                  <label className='block text-sm font-medium text-gray-700 mb-1'>Target Audience</label>
+                  <select name='targetAudience' value={editForm.targetAudience} onChange={(e)=>setEditForm({...editForm,targetAudience:e.target.value})} className='w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all duration-300' required>
+                    <option value='All Classes'>All Classes</option>
+                    <option value='Class 1A'>Class 1A</option>
+                    <option value='Class 1B'>Class 1B</option>
+                    <option value='Class 2A'>Class 2A</option>
+                    <option value='Class 3B'>Class 3B</option>
+                    <option value='All Parents'>All Parents</option>
+                    <option value='All Students'>All Students</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div>
+                <label className='block text-sm font-medium text-gray-700 mb-1'>Priority</label>
+                <select name='priority' value={editForm.priority} onChange={(e)=>setEditForm({...editForm,priority:e.target.value})} className='w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all duration-300'>
+                  <option value='low'>Low Priority</option>
+                  <option value='medium'>Medium Priority</option>
+                  <option value='high'>High Priority</option>
+                </select>
+              </div>
+              
+              <div className='flex justify-end gap-2 pt-4'>
+                <button type='button' onClick={()=>setShowEdit(false)} className='px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-all duration-300 transform hover:scale-105'>
+                  Cancel
+                </button>
+                <button type='submit' className='px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-all duration-300 transform hover:scale-105'>
+                  Save Changes
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}
 
-      {showAdd && (
-        <div className='mt-6 bg-white p-6 rounded-lg shadow'>
-          <h3 className='text-xl font-semibold mb-4'>Register New Student</h3>
-          <form onSubmit={handleAdd} className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-            <div>
-              <label className='block text-sm font-medium mb-1'>Full name</label>
-              <input name='fullName' value={form.fullName} onChange={handleChange} className='w-full border rounded px-3 py-2' />
+      {/* Delete Confirmation Modal */}
+      {showDelete && (
+        <div className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 animate-fadeIn'>
+          <div className='bg-white rounded-xl p-6 w-full max-w-md mx-4 animate-slideInUp'>
+            <h3 className='text-xl font-semibold mb-4'>Delete Announcement</h3>
+            <p className='text-gray-700 mb-6'>Are you sure you want to delete this announcement? This action cannot be undone.</p>
+            <div className='flex justify-end gap-2'>
+              <button onClick={()=>setShowDelete(false)} className='px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-all duration-300 transform hover:scale-105'>
+                Cancel
+              </button>
+              <button onClick={confirmDelete} className='px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-all duration-300 transform hover:scale-105'>
+                Delete
+              </button>
             </div>
-            <div>
-              <label className='block text-sm font-medium mb-1'>ID</label>
-              <input name='id' value={form.id} onChange={handleChange} className='w-full border rounded px-3 py-2' />
-            </div>
-            <div>
-              <label className='block text-sm font-medium mb-1'>Class</label>
-              <input name='className' value={form.className} onChange={handleChange} className='w-full border rounded px-3 py-2' />
-            </div>
-            <div>
-              <label className='block text-sm font-medium mb-1'>Email</label>
-              <input name='email' type='email' value={form.email} onChange={handleChange} className='w-full border rounded px-3 py-2' />
-            </div>
-            <div className='md:col-span-2'>
-              <label className='block text-sm font-medium mb-1'>Password</label>
-              <div className='flex gap-2'>
-                <input name='password' value={form.password} onChange={handleChange} className='flex-1 border rounded px-3 py-2' />
-                <button type='button' onClick={handleGeneratePassword} className='px-3 py-2 rounded-md bg-gray-700 text-white'>Generate</button>
-              </div>
-            </div>
-            <div className='md:col-span-2 flex justify-end gap-2'>
-              <button type='button' onClick={()=>setShowAdd(false)} className='px-4 py-2 rounded-md bg-gray-400 text-white'>Cancel</button>
-              <button type='submit' className='px-4 py-2 rounded-md bg-blue-900 text-white'>Add Student</button>
-            </div>
-          </form>
+          </div>
         </div>
       )}
     </div>

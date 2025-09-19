@@ -12,23 +12,49 @@ import Homework from "./Homework";
 
 function Index() {
   const [selectedtab, setSelectedTab] = React.useState('');
+  const [sidebarOpen, setSidebarOpen] = React.useState(false);
+  
   return (
-    <div className="grid grid-cols-12 min-h-screen bg-gray-200 pl-6 p-2 gap-4">
-      {/* Sidebar - 3/12 width */}
-      <div className="col-span-3">
-        <SideBar  setSelectedTab={setSelectedTab}/>
+    <div className="min-h-screen bg-gray-200">
+      {/* Mobile Header */}
+      <div className="lg:hidden bg-white shadow-lg p-4 flex items-center justify-between">
+        <button 
+          onClick={() => setSidebarOpen(!sidebarOpen)}
+          className="p-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors"
+        >
+          ☰
+        </button>
+        <h1 className="text-xl font-bold text-gray-800">Student Portal</h1>
+        <div className="w-8"></div>
       </div>
 
-      {/* Main Content - 9/12 width */}
-      <div className="col-span-9 p-6 flex flex-col gap-6 ">
-        <Outlet />
-{ selectedtab=='' && <Home/> }   
-    {selectedtab=='schedule' && <ClassSched/> }
-      {selectedtab=='grades' && <Grades/> }
-      {selectedtab=='homework' && <Homework/> }
-      {selectedtab=='exams' && <Exams/> }
-      {selectedtab=='announcements' && <Announcement/> }
-   </div>
+      <div className="flex">
+        {/* Sidebar */}
+        <div className={`${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 fixed lg:static inset-y-0 left-0 z-50 w-80 lg:w-auto lg:flex-shrink-0 transition-transform duration-300 ease-in-out`}>
+          <div className="h-full lg:h-auto">
+            <SideBar setSelectedTab={setSelectedTab} />
+          </div>
+        </div>
+
+        {/* Mobile Overlay */}
+        {sidebarOpen && (
+          <div 
+            className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-40"
+            onClick={() => setSidebarOpen(false)}
+          ></div>
+        )}
+
+        {/* Main Content */}
+        <div className="flex-1 lg:col-span-9 p-4 lg:p-6 flex flex-col gap-6 min-h-screen">
+          <Outlet />
+          {selectedtab === '' && <Home/>}   
+          {selectedtab === 'schedule' && <ClassSched/>}
+          {selectedtab === 'grades' && <Grades/>}
+          {selectedtab === 'homework' && <Homework/>}
+          {selectedtab === 'exams' && <Exams/>}
+          {selectedtab === 'announcements' && <Announcement/>}
+        </div>
+      </div>
     </div>
   );
 }
