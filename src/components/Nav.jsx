@@ -8,7 +8,7 @@ import LanguageSwitcher from "./LanguageSwitcher";
 function Nav() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const { t, language } = useLanguage();
+  const { t, language, setLanguage } = useLanguage();
 
   React.useEffect(() => {
     const handleScroll = () => {
@@ -72,7 +72,15 @@ function Nav() {
           </a>
         </li>
         <li>
-          <LanguageSwitcher />
+          <select
+            value={language}
+            onChange={(e) => setLanguage(e.target.value)}
+            className="px-3 py-2 rounded-lg bg-white text-gray-800 border border-gray-200 hover:border-blue-300 transition-colors duration-200"
+          >
+            <option value="ar">العربية</option>
+            <option value="fr">Français</option>
+            <option value="en">English</option>
+          </select>
         </li>
         <li>
           <Link
@@ -144,8 +152,16 @@ function Nav() {
               {t('contact')}
             </a>
           </li>
-          <li>
-            <LanguageSwitcher className="mb-2" />
+          <li className="w-full px-6">
+            <select
+              value={language}
+              onChange={(e) => setLanguage(e.target.value)}
+              className="w-full px-3 py-2 rounded-lg bg-white text-gray-800 border border-gray-200"
+            >
+              <option value="ar">العربية</option>
+              <option value="fr">Français</option>
+              <option value="en">English</option>
+            </select>
           </li>
           <li>
             <Link

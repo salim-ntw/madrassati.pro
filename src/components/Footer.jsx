@@ -16,10 +16,10 @@ export default function Footer() {
         <div className="absolute bottom-10 right-10 w-24 h-24 bg-white/5 rounded-full animate-pulse" style={{animationDelay: '0.5s'}}></div>
       </div>
 
-      <div className="relative z-10 container mx-auto px-6 md:px-12 py-16">
+      <div className="relative z-10 container mx-auto px-6 md:px-12 py-14 md:py-16">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           <div className="animate-slideInUp" style={{animationDelay: '0.1s'}}>
-            <h2 className={`text-3xl font-bold mb-6 ${language === 'ar' ? 'font-arabic' : ''}`}>Madrassati</h2>
+            <h2 className={`text-3xl font-bold tracking-tight mb-6 ${language === 'ar' ? 'font-arabic' : ''}`}>Madrassati</h2>
             <p className="text-blue-100 text-lg leading-relaxed mb-6">
               Making school management simple and effective for everyone. Connect, communicate, and collaborate seamlessly.
             </p>
@@ -34,37 +34,37 @@ export default function Footer() {
           </div>
 
           <div className="animate-slideInUp" style={{animationDelay: '0.2s'}}>
-            <h3 className={`text-xl font-semibold mb-6 ${language === 'ar' ? 'font-arabic' : ''}`}>Quick Links</h3>
+            <h3 className={`text-xl font-semibold mb-6 ${language === 'ar' ? 'font-arabic' : ''}`}>{t('quickLinks')}</h3>
             <ul className="space-y-4 text-blue-100">
               <li>
                 <a href="#hero" className="hover:text-white transition-all duration-300 transform hover:translate-x-2 flex items-center gap-2">
                   <span className="w-2 h-2 bg-blue-400 rounded-full"></span>
-                  Home
+                  {t('home')}
                 </a>
               </li>
               <li>
                 <a href="#about" className="hover:text-white transition-all duration-300 transform hover:translate-x-2 flex items-center gap-2">
                   <span className="w-2 h-2 bg-blue-400 rounded-full"></span>
-                  About
+                  {t('about')}
                 </a>
               </li>
               <li>
                 <a href="#pricing" className="hover:text-white transition-all duration-300 transform hover:translate-x-2 flex items-center gap-2">
                   <span className="w-2 h-2 bg-blue-400 rounded-full"></span>
-                  Pricing
+                  {t('pricing')}
                 </a>
               </li>
               <li>
                 <a href="#contact" className="hover:text-white transition-all duration-300 transform hover:translate-x-2 flex items-center gap-2">
                   <span className="w-2 h-2 bg-blue-400 rounded-full"></span>
-                  Contact
+                  {t('contact')}
                 </a>
               </li>
             </ul>
           </div>
 
           <div className="animate-slideInUp" style={{animationDelay: '0.3s'}}>
-            <h3 className={`text-xl font-semibold mb-6 ${language === 'ar' ? 'font-arabic' : ''}`}>Contact Info</h3>
+            <h3 className={`text-xl font-semibold mb-6 ${language === 'ar' ? 'font-arabic' : ''}`}>{t('contactInfo')}</h3>
             <div className="space-y-4 text-blue-100">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">

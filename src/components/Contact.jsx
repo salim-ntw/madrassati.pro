@@ -39,70 +39,121 @@ function Contact() {
   };
 
   return (
-    <div id="contact" className="relative w-full bg-gradient-to-br from-blue-900 via-blue-800 to-blue-700">
+    <div
+      id="contact"
+      className="relative w-full bg-gradient-to-br from-blue-900 via-blue-800 to-blue-700"
+    >
       {/* Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-20 left-10 w-32 h-32 bg-white/5 rounded-full animate-pulse"></div>
-        <div className="absolute top-40 right-20 w-24 h-24 bg-white/5 rounded-full animate-pulse" style={{animationDelay: '1s'}}></div>
-        <div className="absolute bottom-40 left-20 w-20 h-20 bg-white/5 rounded-full animate-pulse" style={{animationDelay: '2s'}}></div>
-        <div className="absolute bottom-20 right-10 w-28 h-28 bg-white/5 rounded-full animate-pulse" style={{animationDelay: '0.5s'}}></div>
+        <div
+          className="absolute top-40 right-20 w-24 h-24 bg-white/5 rounded-full animate-pulse"
+          style={{ animationDelay: "1s" }}
+        ></div>
+        <div
+          className="absolute bottom-40 left-20 w-20 h-20 bg-white/5 rounded-full animate-pulse"
+          style={{ animationDelay: "2s" }}
+        ></div>
+        <div
+          className="absolute bottom-20 right-10 w-28 h-28 bg-white/5 rounded-full animate-pulse"
+          style={{ animationDelay: "0.5s" }}
+        ></div>
       </div>
 
       <div className="relative z-10 text-white flex flex-col items-center py-20 px-6">
-        <div className="text-center mb-8 animate-fadeIn">
-          <h1 className={`font-bold text-4xl md:text-5xl mb-4 animate-slideInDown ${language === 'ar' ? 'font-arabic' : ''}`}>
-            Contact Us
+        <div className="text-center mb-8 animate-fadeIn reveal">
+          <h1
+            className={`font-bold text-4xl md:text-5xl tracking-tight mb-4 animate-slideInDown ${
+              language === "ar" ? "font-arabic" : ""
+            }`}
+          >
+            {t("contactUs")}
           </h1>
-          <div className="w-24 h-1 bg-gradient-to-r from-blue-400 to-blue-600 mx-auto rounded-full mb-6 animate-slideInUp" style={{animationDelay: '0.2s'}}></div>
-          <p className={`text-blue-100 text-lg md:text-xl max-w-2xl mx-auto animate-slideInUp ${language === 'ar' ? 'font-arabic' : ''}`} style={{animationDelay: '0.3s'}}>
-            We're here to help and answer your questions
+          <div
+            className="w-24 h-1 bg-gradient-to-r from-blue-400 to-blue-600 mx-auto rounded-full mb-6 animate-slideInUp"
+            style={{ animationDelay: "0.2s" }}
+          ></div>
+          <p
+            className={`text-blue-100 text-lg md:text-xl max-w-2xl mx-auto animate-slideInUp ${
+              language === "ar" ? "font-arabic" : ""
+            }`}
+            style={{ animationDelay: "0.3s" }}
+          >
+            {t("contactSubtitle")}
           </p>
         </div>
       </div>
 
       <div className="relative z-10 flex flex-col lg:flex-row bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl w-[90%] mx-auto mt-[-60px] overflow-hidden border border-white/20">
         <div className="flex flex-col gap-8 bg-gradient-to-br from-blue-50 to-blue-100 w-full lg:w-1/2 p-8 lg:p-12">
-          <div className="animate-slideInUp" style={{animationDelay: '0.4s'}}>
-            <h2 className={`text-3xl font-bold text-gray-800 mb-4 ${language === 'ar' ? 'font-arabic' : ''}`}>Get in Touch</h2>
+          <div className="animate-slideInUp" style={{ animationDelay: "0.4s" }}>
+            <h2
+              className={`text-3xl font-bold text-gray-800 mb-4 ${
+                language === "ar" ? "font-arabic" : ""
+              }`}
+            >
+              {t("getInTouch")}
+            </h2>
             <p className="text-gray-600 text-lg">
               Reach out to us through any of the following options:
             </p>
           </div>
 
-          <div className="space-y-8 animate-slideInUp" style={{animationDelay: '0.5s'}}>
+          <div
+            className="space-y-8 animate-slideInUp"
+            style={{ animationDelay: "0.5s" }}
+          >
             <div className="flex items-center gap-6 p-4 bg-white/80 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
               <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center">
-                <img src={phone} alt="call" className="w-6 h-6 filter brightness-0 invert" />
+                <img
+                  src={phone}
+                  alt="call"
+                  className="w-6 h-6 filter brightness-0 invert"
+                />
               </div>
               <div>
-                <h3 className="font-bold text-gray-800 text-lg">Call Us</h3>
+                <h3 className="font-bold text-gray-800 text-lg">
+                  {t("callUs")}
+                </h3>
                 <p className="text-gray-600">+213 123 456 789</p>
               </div>
             </div>
             <div className="flex items-center gap-6 p-4 bg-white/80 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
               <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center">
-                <img src={email} alt="email" className="w-6 h-6 filter brightness-0 invert" />
+                <img
+                  src={email}
+                  alt="email"
+                  className="w-6 h-6 filter brightness-0 invert"
+                />
               </div>
               <div>
-                <h3 className="font-bold text-gray-800 text-lg">Email Us</h3>
+                <h3 className="font-bold text-gray-800 text-lg">
+                  {t("emailUs")}
+                </h3>
                 <p className="text-gray-600">madrassati@gmail.com</p>
               </div>
             </div>
           </div>
 
-          <div className="animate-slideInUp" style={{animationDelay: '0.6s'}}>
+          <div className="animate-slideInUp" style={{ animationDelay: "0.6s" }}>
             <h2 className="text-xl font-semibold text-gray-800 mb-4">
               Follow us on social media
             </h2>
             <div className="flex gap-4">
-              <a href="#" className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center hover:bg-blue-600 transition-all duration-300 transform hover:scale-110 shadow-lg">
+              <a
+                href="#"
+                className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center hover:bg-blue-600 transition-all duration-300 transform hover:scale-110 shadow-lg"
+              >
                 <img
                   src={facebook}
                   alt="facebook"
                   className="w-6 h-6 filter brightness-0 invert"
                 />
               </a>
-              <a href="#" className="w-12 h-12 bg-pink-500 rounded-full flex items-center justify-center hover:bg-pink-600 transition-all duration-300 transform hover:scale-110 shadow-lg">
+              <a
+                href="#"
+                className="w-12 h-12 bg-pink-500 rounded-full flex items-center justify-center hover:bg-pink-600 transition-all duration-300 transform hover:scale-110 shadow-lg"
+              >
                 <img
                   src={instagram}
                   alt="instagram"
@@ -114,9 +165,13 @@ function Contact() {
         </div>
 
         <div className="flex flex-col w-full lg:w-1/2 p-8 lg:p-12 bg-white">
-          <div className="animate-slideInUp" style={{animationDelay: '0.7s'}}>
-            <h2 className={`text-3xl font-bold text-gray-800 mb-6 ${language === 'ar' ? 'font-arabic' : ''}`}>
-              Send us a message
+          <div className="animate-slideInUp" style={{ animationDelay: "0.7s" }}>
+            <h2
+              className={`text-3xl font-bold text-gray-800 mb-6 ${
+                language === "ar" ? "font-arabic" : ""
+              }`}
+            >
+              {t("sendUsMessage")}
             </h2>
           </div>
 
@@ -124,7 +179,7 @@ function Contact() {
             ref={formRef}
             onSubmit={sendEmail}
             className="flex flex-col gap-6 animate-slideInUp"
-            style={{animationDelay: '0.8s'}}
+            style={{ animationDelay: "0.8s" }}
           >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <input

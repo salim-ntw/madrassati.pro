@@ -6,9 +6,9 @@ const Register = () => {
     <div className="bg-gradient-to-br from-blue-950 to-gray-400 flex items-center justify-center min-h-screen w-screen">
       <div className="bg-white w-[90%] max-w-5xl flex rounded-xl shadow-lg overflow-hidden">
         {/* left Side - Form */}
-        <div className="w-1/2 flex items-center justify-center p-8">
-          <form className="flex flex-col w-full max-w-sm gap-4">
-            <h2 className="text-2xl font-bold text-blue-950 text-center mb-2">
+        <div className="w-1/2 flex items-center justify-center p-6 md:p-8">
+          <form className="flex flex-col w-full max-w-sm gap-3 md:gap-4">
+            <h2 className="text-2xl font-bold text-blue-950 text-center mb-1 md:mb-2">
               Register
             </h2>
 
@@ -41,7 +41,7 @@ const Register = () => {
               className="border border-gray-300 p-2 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
 
-            <div className="flex gap-4">
+            <div className="flex gap-3 md:gap-4">
               <select className="w-1/2 border border-gray-300 p-2 rounded-md bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 <option value="">Select Gender</option>
                 <option value="male">Male</option>
@@ -66,16 +66,16 @@ const Register = () => {
         </div>
 
         {/* right Side */}
-        <div className="flex flex-col bg-gray-400 w-1/2 items-center justify-center gap-6 p-10">
-          <img src={logo} alt="logo" className="w-40" />
-          <div className="flex flex-col items-center text-center gap-2">
-            <h1 className="text-white font-bold text-3xl">
+        <div className="flex flex-col bg-gray-400 w-1/2 items-center justify-center gap-4 md:gap-6 p-6 md:p-10">
+          <img src={logo} alt="logo" className="w-32 md:w-40" />
+          <div className="flex flex-col items-center text-center gap-1 md:gap-2">
+            <h1 className="text-white font-bold text-2xl md:text-3xl">
               Welcome to Madrassati,
             </h1>
-            <p className="text-blue-950 text-sm">Already have an account?</p>
+            <p className="text-blue-950 text-xs md:text-sm">Already have an account?</p>
             <button
               onClick={() => (window.location.href = "/login")}
-              className="bg-blue-950 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-800 transition duration-300 cursor-pointer"
+              className="bg-blue-950 text-white px-4 py-2 rounded-lg text-xs md:text-sm hover:bg-blue-800 transition duration-300 cursor-pointer"
             >
               Login
             </button>

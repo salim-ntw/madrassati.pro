@@ -52,7 +52,7 @@ function Testimonials() {
       </div>
 
       <div className="relative z-10 w-full max-w-6xl">
-        <div className="text-center mb-12 animate-fadeIn">
+        <div className="text-center mb-12 animate-fadeIn reveal">
           <h1 className={`text-4xl md:text-5xl font-bold text-white mb-4 animate-slideInDown ${language === 'ar' ? 'font-arabic' : ''}`}>
             {t('testimonialsTitle')}
           </h1>
@@ -62,7 +62,7 @@ function Testimonials() {
           </p>
         </div>
 
-        <div className="flex flex-col lg:flex-row items-center gap-8 w-full justify-center animate-slideInUp" style={{animationDelay: '0.4s'}}>
+        <div className="flex flex-col lg:flex-row items-center gap-8 w-full justify-center animate-slideInUp reveal" style={{animationDelay: '0.4s'}}>
           {/* Left Arrow */}
           <button
             onClick={goToPrev}
