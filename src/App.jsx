@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./index.css";
 import { LanguageProvider } from "./contexts/LanguageContext";
@@ -9,6 +9,7 @@ import Login from "./pages/Auth/Login.jsx";
 import Student from "./pages/Student/index.jsx";
 import Parent from "./pages/Parent/index.jsx";
 import Teacher from "./pages/Teacher/index.jsx";
+import { printEndpointVerification } from "./api/endpoints.js";
 
 //student sub pages
 import ClassSchedule from "./pages/Student/ClassSched.jsx";
@@ -22,6 +23,12 @@ import StudentProfile from "./pages/Student/Profile.jsx";
 import TeacherProfile from "./pages/Teacher/sections/Profile.jsx";
 const App = () => {
   useScrollReveal();
+  
+  // Print API endpoints verification on app load
+  useEffect(() => {
+    printEndpointVerification();
+  }, []);
+
   return (
     <LanguageProvider>
       <Router>
@@ -31,21 +38,21 @@ const App = () => {
           {/* Add other routes as needed */}
           <Route path="/Login" element={<Login />} />
           {/* Example: <Route path="/profile" element={<Profile />} /> */}
-          <Route path="/student" element={<Student />} />
-          <Route path="/parent" element={<Parent />} />
-          <Route path="/teacher" element={<Teacher />} />
+          {/* Student routes with dynamic ID */}
+          <Route path="/student/:id/dashboard" element={<Student />} />
+          <Route path="/student/:id/profile" element={<StudentProfile />} />
+          <Route path="/student/:id/schedule" element={<ClassSchedule />} />
+          <Route path="/student/:id/grades" element={<Grades />} />
+          <Route path="/student/:id/homework" element={<Homework />} />
+          <Route path="/student/:id/exams" element={<Exams />} />
+          <Route path="/student/:id/announcements" element={<Announcements />} />
 
-          {/* default page when visiting /student */}
-          {/* <Route index element={<div>Welcome + Highlights</div>} /> */}
-          <Route path="/student/profile" element={<StudentProfile />} />
-          <Route path="/student/schedule" element={<ClassSchedule />} />
-          <Route path="/student/grades" element={<Grades />} />
-          <Route path="/student/homework" element={<Homework />} />
-          <Route path="/student/exams" element={<Exams />} />
-          <Route path="/student/announcements" element={<Announcements />} />
+          {/* Parent routes with dynamic ID */}
+          <Route path="/parent/:id/dashboard" element={<Parent />} />
 
-          {/* teacher sub pages */}
-          <Route path="/teacher/profile" element={<TeacherProfile />} />
+          {/* Teacher routes with dynamic ID */}
+          <Route path="/teacher/:id/dashboard" element={<Teacher />} />
+          <Route path="/teacher/:id/profile" element={<TeacherProfile />} />
         </Routes>
       </Router>
     </LanguageProvider>
