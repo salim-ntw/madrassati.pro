@@ -1,72 +1,92 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { studentAPI } from "../../api/student";
 
 export default function Announcement() {
-  const announcements = [
-    {
-      id: "A001",
-      title: "Exam Schedule Released",
-      date: "2025-01-20",
-      content: "The exam timetable for the Spring semester has been published. Please check the Exams section for your schedule and prepare accordingly.",
-      type: "info",
-      priority: "medium",
-      author: "Academic Office"
-    },
-    {
-      id: "A002",
-      title: "Holiday Notice",
-      date: "2025-01-18",
-      content: "School will be closed on January 25th for National Day. Classes will resume on January 26th. Enjoy your holiday!",
-      type: "info",
-      priority: "low",
-      author: "Administration"
-    },
-    {
-      id: "A003",
-      title: "Urgent: Room Change",
-      date: "2025-01-19",
-      content: "The Computer Science class on Monday has been moved to Room B203 due to maintenance work in Lab 2. Please update your schedules.",
-      type: "urgent",
-      priority: "high",
-      author: "IT Department"
-    },
-    {
-      id: "A004",
-      title: "Library Extended Hours",
-      date: "2025-01-17",
-      content: "The library will be open until 10 PM during exam period (January 20-30) to help students with their studies.",
-      type: "info",
-      priority: "low",
-      author: "Library Staff"
+  const { id: studentId } = useParams();
+  const [announcements, setAnnouncements] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchAnnouncements = async () => {
+      try {
+        console.log('📢 Fetching announcements for student:', studentId);
+        setLoading(true);
+        const response = await studentAPI.getAnnouncements(studentId);
+        console.log('✅ Announcements data received:', response.data);
+        setAnnouncements(response.data.data.announcements || []);
+        setError(null);
+      } catch (err) {
+        console.error('❌ Error fetching announcements:', err);
+        setError(err.message || 'Failed to load announcements');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (studentId) {
+      fetchAnnouncements();
     }
-  ];
+  }, [studentId]);
 
   const getTypeColor = (type) => {
     switch (type) {
-      case 'urgent': return 'bg-red-100 text-red-800 border-red-200'
-      case 'info': return 'bg-blue-100 text-blue-800 border-blue-200'
-      default: return 'bg-gray-100 text-gray-800 border-gray-200'
+      case 'urgent': return 'bg-red-100 text-red-800 border-red-200';
+      case 'info': return 'bg-blue-100 text-blue-800 border-blue-200';
+      default: return 'bg-gray-100 text-gray-800 border-gray-200';
     }
-  }
+  };
 
   const getPriorityColor = (priority) => {
     switch (priority) {
-      case 'high': return 'bg-red-100 text-red-800'
-      case 'medium': return 'bg-yellow-100 text-yellow-800'
-      case 'low': return 'bg-green-100 text-green-800'
-      default: return 'bg-gray-100 text-gray-800'
+      case 'high': return 'bg-red-100 text-red-800';
+      case 'medium': return 'bg-yellow-100 text-yellow-800';
+      case 'low': return 'bg-green-100 text-green-800';
+      default: return 'bg-gray-100 text-gray-800';
     }
-  }
+  };
 
   const getTypeIcon = (type) => {
     switch (type) {
-      case 'urgent': return '🚨'
-      case 'info': return 'ℹ️'
-      default: return '📢'
+      case 'urgent': return '🚨';
+      case 'info': return 'ℹ️';
+      default: return '📢';
     }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading announcements...</p>
+        </div>
+      </div>
+    );
   }
 
-  const urgentCount = announcements.filter(a => a.type === 'urgent').length
-  const infoCount = announcements.filter(a => a.type === 'info').length
+  if (error) {
+    return (
+      <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center m-6">
+        <p className="text-red-600 font-semibold">⚠️ {error}</p>
+        <button 
+          onClick={() => window.location.reload()} 
+          className="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+        >
+          Retry
+        </button>
+      </div>
+    );
+  }
+
+  // Calculate stats
+  const urgentCount = announcements.filter(a => a.type === 'urgent').length;
+  const infoCount = announcements.filter(a => a.type === 'info').length;
+  
+  // Count announcements from last 7 days
+  const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+  const thisWeekCount = announcements.filter(a => new Date(a.date) >= weekAgo).length;
 
   return (
     <div className="p-6 animate-fadeIn">
@@ -117,7 +137,7 @@ export default function Announcement() {
             </div>
             <div>
               <p className="text-sm font-medium text-gray-600">This Week</p>
-              <p className="text-2xl font-bold text-gray-900">4</p>
+              <p className="text-2xl font-bold text-gray-900">{thisWeekCount}</p>
             </div>
           </div>
         </div>
@@ -137,7 +157,7 @@ export default function Announcement() {
           <div className="p-6">
             <div className="grid gap-4">
               {announcements.map((announcement, index) => (
-                <div key={announcement.id} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-all duration-300 transform hover:scale-[1.02]">
+                <div key={announcement._id || index} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-all duration-300 transform hover:scale-[1.02]">
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
@@ -152,11 +172,11 @@ export default function Announcement() {
                       <p className="text-gray-600 mb-3">{announcement.content}</p>
                       <div className="flex items-center gap-4 text-sm text-gray-500">
                         <span>📅 {new Date(announcement.date).toLocaleDateString()}</span>
-                        <span>👤 {announcement.author}</span>
+                        <span>👤 {announcement.postedBy}</span>
                       </div>
                     </div>
                   </div>
-                  <div className="text-xs text-gray-500">ID: {announcement.id}</div>
+                  <div className="text-xs text-gray-500">ID: {announcement.announcementId}</div>
                 </div>
               ))}
             </div>

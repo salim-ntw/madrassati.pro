@@ -23,3 +23,5 @@ export const parentAPI = {
   // GET /parent/announcement
   getAnnouncement: () => api.get('/parent/announcement'),
 };
+
+

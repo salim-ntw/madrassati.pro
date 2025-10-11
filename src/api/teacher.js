@@ -44,3 +44,5 @@ export const teacherAPI = {
   // GET /teacher/attendance/:classId
   getAttendanceByClass: (classId) => api.get(`/teacher/attendance/${classId}`),
 };
+
+
