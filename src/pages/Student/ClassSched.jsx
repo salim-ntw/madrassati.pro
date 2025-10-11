@@ -4,7 +4,7 @@ import { studentAPI } from "../../api/student";
 
 export default function ClassSched() {
   const { id: studentId } = useParams();
-  const [schedule, setSchedule] = useState([]);
+  const [schedule, setSchedule] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -15,7 +15,7 @@ export default function ClassSched() {
         setLoading(true);
         const response = await studentAPI.getSchedule(studentId);
         console.log('✅ Schedule data received:', response.data);
-        setSchedule(response.data.data.schedule || []);
+        setSchedule(response.data.data.schedule || {});
         setError(null);
       } catch (err) {
         console.error('❌ Error fetching schedule:', err);
@@ -56,10 +56,20 @@ export default function ClassSched() {
   }
 
   // Calculate stats
-  const totalClasses = schedule.length;
-  const uniqueSubjects = [...new Set(schedule.map(s => s.subject))].length;
-  // Calculate total hours (estimate 1.5 hours per class)
-  const totalHours = Math.round(totalClasses * 1.5);
+  const allClasses = Object.values(schedule).flat();
+  const totalClasses = allClasses.length;
+  const uniqueSubjects = [...new Set(allClasses.map(s => s.subject))].length;
+  
+  // Calculate total hours based on actual time differences
+  const totalHours = allClasses.reduce((total, session) => {
+    if (session.startTime && session.endTime) {
+      const [startHour, startMin] = session.startTime.split(':').map(Number);
+      const [endHour, endMin] = session.endTime.split(':').map(Number);
+      const hours = (endHour * 60 + endMin - startHour * 60 - startMin) / 60;
+      return total + hours;
+    }
+    return total;
+  }, 0).toFixed(1);
 
   return (
     <div className="p-6 animate-fadeIn">
@@ -104,7 +114,7 @@ export default function ClassSched() {
         </div>
       </div>
 
-      {schedule.length === 0 ? (
+      {totalClasses === 0 ? (
         <div className="bg-white rounded-xl shadow-lg p-12 text-center animate-slideInUp" style={{animationDelay: '0.4s'}}>
           <div className="text-6xl mb-4">📅</div>
           <p className="text-gray-500 text-lg">No schedule available yet.</p>
@@ -112,42 +122,54 @@ export default function ClassSched() {
       ) : (
         <div className="bg-white rounded-xl shadow-lg overflow-hidden animate-slideInUp" style={{animationDelay: '0.4s'}}>
           <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white p-4">
-            <h2 className="text-xl font-semibold">Weekly Class Schedule</h2>
+            <h2 className="text-xl font-semibold">📚 Weekly Schedule ({totalClasses} Classes)</h2>
           </div>
           
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gray-50">
+              <thead className="bg-gray-50 border-b-2 border-gray-200">
                 <tr>
-                  <th className="p-4 text-left font-semibold text-gray-700">Day</th>
-                  <th className="p-4 text-left font-semibold text-gray-700">Time</th>
-                  <th className="p-4 text-left font-semibold text-gray-700">Subject</th>
-                  <th className="p-4 text-left font-semibold text-gray-700">Room</th>
-                  <th className="p-4 text-center font-semibold text-gray-700">Status</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Day</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Class</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Time</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Room</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Status</th>
                 </tr>
               </thead>
               <tbody>
-                {schedule.map((session, index) => (
-                  <tr key={session._id || index} className={`${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'} hover:bg-blue-50 transition-colors`}>
-                    <td className="p-4 font-semibold text-gray-800">{session.day}</td>
-                    <td className="p-4">
-                      <span className="px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
-                        {session.startTime} – {session.endTime}
-                      </span>
-                    </td>
-                    <td className="p-4 font-semibold text-gray-800">
-                      {session.subject}
-                    </td>
-                    <td className="p-4 text-gray-600">
-                      {session.room}
-                    </td>
-                    <td className="p-4 text-center">
-                      <div className={`w-3 h-3 rounded-full mx-auto ${
-                        session.status === 'scheduled' ? 'bg-green-500 animate-pulse' : 'bg-gray-400'
-                      }`}></div>
-                    </td>
-                  </tr>
-                ))}
+                {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map((day) => {
+                  const dayClasses = schedule[day] || [];
+                  return dayClasses.map((session, index) => (
+                    <tr key={`${day}-${index}`} className="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+                      <td className="px-6 py-4">
+                        {/* Show day name only for first class of the day */}
+                        {index === 0 ? (
+                          <span className="font-semibold text-gray-800">{day}</span>
+                        ) : (
+                          <span className="text-gray-400 text-sm">↳</span>
+                        )}
+                      </td>
+                      <td className="px-6 py-4">
+                        <span className="text-gray-800 font-medium">{session.subject}</span>
+                      </td>
+                      <td className="px-6 py-4">
+                        <span className="text-gray-600">{session.startTime} - {session.endTime}</span>
+                      </td>
+                      <td className="px-6 py-4">
+                        <span className="text-gray-600">{session.room}</span>
+                      </td>
+                      <td className="px-6 py-4">
+                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                          session.status === 'Completed' ? 'bg-gray-100 text-gray-600' :
+                          session.status === 'Scheduled' ? 'bg-green-100 text-green-800' : 
+                          'bg-blue-100 text-blue-800'
+                        }`}>
+                          {session.status}
+                        </span>
+                      </td>
+                    </tr>
+                  ));
+                })}
               </tbody>
             </table>
           </div>
@@ -156,3 +178,5 @@ export default function ClassSched() {
     </div>
   );
 }
+
+

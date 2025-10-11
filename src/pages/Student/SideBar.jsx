@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { studentAPI } from '../../api/student';
+import { authAPI, storage } from '../../utils/auth';
 import profPic from '../../assets/graduated.png';
 import sched from "../../assets/icons/timetable.png";
 import grade from "../../assets/icons/grade.png";
@@ -12,10 +13,9 @@ import user from "../../assets/icons/user.png";
 import home from "../../assets/icons/home.png";
 import { Link, useNavigate } from "react-router-dom"; 
 
-export default function SideBar({ setSelectedTab }) {
+export default function SideBar({ setSidebarOpen }) {
     const { id: studentId } = useParams();
     const navigate = useNavigate();
-    const [activeTab, setActiveTab] = React.useState('');
     const [studentData, setStudentData] = useState(null);
     
     useEffect(() => {
@@ -36,28 +36,36 @@ export default function SideBar({ setSelectedTab }) {
     }, [studentId]);
     
     const features = [
-        { name: 'Home', icon: home, key: '', color: 'from-blue-500 to-blue-600' },
-        { name: 'Class Schedule', icon: sched, key: 'schedule', color: 'from-green-500 to-green-600' },
-        { name: 'Grades', icon: grade, key: 'grades', color: 'from-yellow-500 to-yellow-600' },
-        { name: 'Homework', icon: homework, key: 'homework', color: 'from-orange-500 to-orange-600' },
-        { name: 'Exams', icon: exam, key: 'exams', color: 'from-red-500 to-red-600' },
-        { name: 'Announcements', icon: announcement, key: 'announcements', color: 'from-purple-500 to-purple-600' },
+        { name: 'Home', icon: home, path: 'dashboard', color: 'from-blue-500 to-blue-600' },
+        { name: 'Class Schedule', icon: sched, path: 'schedule', color: 'from-green-500 to-green-600' },
+        { name: 'Grades', icon: grade, path: 'grades', color: 'from-yellow-500 to-yellow-600' },
+        { name: 'Homework', icon: homework, path: 'homework', color: 'from-orange-500 to-orange-600' },
+        { name: 'Exams', icon: exam, path: 'exams', color: 'from-red-500 to-red-600' },
+        { name: 'Announcements', icon: announcement, path: 'announcements', color: 'from-purple-500 to-purple-600' },
     ];
 
-    const handleTabClick = (key) => {
-        setActiveTab(key);
-        setSelectedTab(key);
+    const handleTabClick = (path) => {
+        navigate(`/student/${studentId}/${path}`);
     };
 
-    const handleLogout = () => {
-        // Clear localStorage
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        sessionStorage.removeItem('token');
-        sessionStorage.removeItem('user');
-        
-        // Redirect to login
-        navigate('/login');
+    const handleLogout = async () => {
+        try {
+            console.log('🚪 Logging out...');
+            
+            // Call server-side logout endpoint
+            await authAPI.logout();
+            console.log('✅ Server-side logout successful');
+            
+        } catch (error) {
+            console.error('⚠️ Server logout failed (continuing with client logout):', error);
+        } finally {
+            // Always clear client-side storage
+            storage.clearUser();
+            console.log('✅ Client-side data cleared');
+            
+            // Redirect to login
+            navigate('/login');
+        }
     };
 
     // Display data (use fetched data or default values)
@@ -103,24 +111,25 @@ export default function SideBar({ setSelectedTab }) {
                 {/* Navigation Menu */}
                 <div className='flex flex-col gap-3 justify-center items-start w-full'>
                     {features.map((feature, i) => (
-                        <button 
-                            key={i} 
-                            onClick={() => handleTabClick(feature.key)} 
+                        <Link
+                            key={i}
+                            to={`/student/${studentId}/${feature.path}`}
+                            onClick={() => setSidebarOpen && setSidebarOpen(false)}
                             className={`flex flex-row items-center gap-3 cursor-pointer px-4 py-3 rounded-lg w-full transition-all duration-300 transform hover:scale-105 animate-slideInUp ${
-                                activeTab === feature.key 
+                                window.location.pathname.includes(feature.path)
                                     ? `bg-gradient-to-r ${feature.color} text-white shadow-lg` 
                                     : 'hover:bg-white/10 hover:text-gray-200'
                             }`}
                             style={{animationDelay: `${(i + 2) * 0.1}s`}}
                         >
-                            <div className={`p-2 rounded-lg ${activeTab === feature.key ? 'bg-white/20' : 'bg-white/10'}`}>
+                            <div className={`p-2 rounded-lg ${window.location.pathname.includes(feature.path) ? 'bg-white/20' : 'bg-white/10'}`}>
                                 <img className='w-5 h-5' src={feature.icon} alt={feature.name} />
                             </div>
                             <span className="font-medium">{feature.name}</span>
-                            {activeTab === feature.key && (
+                            {window.location.pathname.includes(feature.path) && (
                                 <div className="ml-auto w-2 h-2 bg-white rounded-full animate-pulse"></div>
                             )}
-                        </button>
+                        </Link>
                     ))}
                 </div>
 

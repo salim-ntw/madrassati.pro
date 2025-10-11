@@ -11,7 +11,6 @@ import Announcement from "./Announcement";
 import Homework from "./Homework";
 
 function Index() {
-  const [selectedtab, setSelectedTab] = React.useState('');
   const [sidebarOpen, setSidebarOpen] = React.useState(false);
   
   return (
@@ -29,10 +28,10 @@ function Index() {
       </div>
 
       <div className="flex">
-        {/* Sidebar */}
+        {/* Sidebar - ALWAYS VISIBLE */}
         <div className={`${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 fixed lg:static inset-y-0 left-0 z-50 w-80 lg:w-auto lg:flex-shrink-0 transition-transform duration-300 ease-in-out`}>
           <div className="h-full lg:h-auto">
-            <SideBar setSelectedTab={setSelectedTab} />
+            <SideBar setSidebarOpen={setSidebarOpen} />
           </div>
         </div>
 
@@ -44,15 +43,9 @@ function Index() {
           ></div>
         )}
 
-        {/* Main Content */}
+        {/* Main Content - Shows different pages based on route */}
         <div className="flex-1 lg:col-span-9 p-4 lg:p-6 flex flex-col gap-6 min-h-screen">
           <Outlet />
-          {selectedtab === '' && <Home/>}   
-          {selectedtab === 'schedule' && <ClassSched/>}
-          {selectedtab === 'grades' && <Grades/>}
-          {selectedtab === 'homework' && <Homework/>}
-          {selectedtab === 'exams' && <Exams/>}
-          {selectedtab === 'announcements' && <Announcement/>}
         </div>
       </div>
     </div>

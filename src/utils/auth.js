@@ -20,6 +20,14 @@ export const authAPI = {
     return response.data;
   },
 
+  // Logout user
+  logout: async () => {
+    console.log("🚪 API: Making logout request to /auth/logout");
+    const response = await api.post('/auth/logout');
+    console.log("📥 API: Logout response:", response.data);
+    return response.data;
+  },
+
   // Forgot password
   forgotPassword: async (email) => {
     const response = await api.post('/auth/forgot-password', { email });

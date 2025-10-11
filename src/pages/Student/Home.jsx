@@ -139,11 +139,14 @@ export default function Home() {
 
   return (
     <div className='flex flex-col gap-6 animate-fadeIn'>
-      {/* Student Info Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-800 rounded-xl shadow-lg p-6 text-white">
+      {/* Welcome Component */}
+      <Welcome />
+
+      {/* Student Info Header - Optional, can be removed if redundant */}
+      {/* <div className="bg-gradient-to-r from-blue-600 to-blue-800 rounded-xl shadow-lg p-6 text-white">
         <h1 className="text-3xl font-bold">{dashboardData.student?.name || 'Student'}</h1>
         <p className="text-blue-100 mt-2">{dashboardData.student?.gradeLevel || 'Grade Level'}</p>
-      </div>
+      </div> */}
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

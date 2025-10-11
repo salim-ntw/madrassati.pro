@@ -4,20 +4,25 @@ import { studentAPI } from "../../api/student";
 
 export default function Exams() {
   const { id: studentId } = useParams();
-  const [upcomingExams, setUpcomingExams] = useState([]);
-  const [completedExams, setCompletedExams] = useState([]);
+  const [exams, setExams] = useState([]);
+  const [tests, setTests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchExams = async () => {
       try {
-        console.log('📋 Fetching exams for student:', studentId);
+        console.log('📋 Fetching exams and tests for student:', studentId);
         setLoading(true);
         const response = await studentAPI.getExams(studentId);
         console.log('✅ Exams data received:', response.data);
-        setUpcomingExams(response.data.data.upcoming || []);
-        setCompletedExams(response.data.data.completed || []);
+        
+        // Separate exams and tests
+        const examsData = response.data.data.exams || [];
+        const testsData = response.data.data.tests || [];
+        
+        setExams(examsData);
+        setTests(testsData);
         setError(null);
       } catch (err) {
         console.error('❌ Error fetching exams:', err);
@@ -43,8 +48,9 @@ export default function Exams() {
   const getTypeColor = (type) => {
     switch (type) {
       case 'quiz': return 'bg-blue-100 text-blue-800 border-blue-200';
+      case 'test': return 'bg-purple-100 text-purple-800 border-purple-200';
       case 'midterm': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      case 'practical': return 'bg-green-100 text-green-800 border-green-200';
+      case 'exam': return 'bg-orange-100 text-orange-800 border-orange-200';
       case 'final': return 'bg-red-100 text-red-800 border-red-200';
       default: return 'bg-gray-100 text-gray-800 border-gray-200';
     }
@@ -53,8 +59,9 @@ export default function Exams() {
   const getTypeIcon = (type) => {
     switch (type) {
       case 'quiz': return '📝';
+      case 'test': return '📄';
       case 'midterm': return '📊';
-      case 'practical': return '💻';
+      case 'exam': return '📋';
       case 'final': return '🎯';
       default: return '📋';
     }
@@ -86,11 +93,9 @@ export default function Exams() {
   }
 
   // Calculate stats
-  const quizzes = upcomingExams.filter(e => e.type === 'quiz').length;
-  const midterms = upcomingExams.filter(e => e.type === 'midterm').length;
-  const finals = upcomingExams.filter(e => e.type === 'final').length;
-  const practicals = upcomingExams.filter(e => e.type === 'practical').length;
-  const uniqueSubjects = [...new Set(upcomingExams.map(e => e.subject))].length;
+  const allAssessments = [...exams, ...tests];
+  const upcomingCount = allAssessments.filter(e => new Date(e.date) >= new Date()).length;
+  const uniqueSubjects = [...new Set(allAssessments.map(e => e.subject))].length;
 
   return (
     <div className="p-6 animate-fadeIn">
@@ -100,36 +105,36 @@ export default function Exams() {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
         <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 transform hover:scale-105 animate-slideInUp" style={{animationDelay: '0.1s'}}>
           <div className="flex items-center">
-            <div className="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center text-white text-xl mr-4">
-              📝
+            <div className="w-12 h-12 bg-red-500 rounded-lg flex items-center justify-center text-white text-xl mr-4">
+              🎯
             </div>
             <div>
-              <p className="text-sm font-medium text-gray-600">Upcoming</p>
-              <p className="text-2xl font-bold text-gray-900">{upcomingExams.length}</p>
+              <p className="text-sm font-medium text-gray-600">Exams</p>
+              <p className="text-2xl font-bold text-gray-900">{exams.length}</p>
             </div>
           </div>
         </div>
         
         <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 transform hover:scale-105 animate-slideInUp" style={{animationDelay: '0.2s'}}>
           <div className="flex items-center">
-            <div className="w-12 h-12 bg-red-500 rounded-lg flex items-center justify-center text-white text-xl mr-4">
-              🎯
+            <div className="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center text-white text-xl mr-4">
+              📝
             </div>
             <div>
-              <p className="text-sm font-medium text-gray-600">Finals</p>
-              <p className="text-2xl font-bold text-gray-900">{finals}</p>
+              <p className="text-sm font-medium text-gray-600">Tests</p>
+              <p className="text-2xl font-bold text-gray-900">{tests.length}</p>
             </div>
           </div>
         </div>
         
         <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 transform hover:scale-105 animate-slideInUp" style={{animationDelay: '0.3s'}}>
           <div className="flex items-center">
-            <div className="w-12 h-12 bg-yellow-500 rounded-lg flex items-center justify-center text-white text-xl mr-4">
-              ⏰
+            <div className="w-12 h-12 bg-purple-500 rounded-lg flex items-center justify-center text-white text-xl mr-4">
+              📊
             </div>
             <div>
-              <p className="text-sm font-medium text-gray-600">Next Exam</p>
-              <p className="text-sm font-bold text-gray-900">{upcomingExams[0]?.title.slice(0, 15) || 'None'}</p>
+              <p className="text-sm font-medium text-gray-600">Total</p>
+              <p className="text-2xl font-bold text-gray-900">{exams.length + tests.length}</p>
             </div>
           </div>
         </div>
@@ -147,21 +152,21 @@ export default function Exams() {
         </div>
       </div>
 
-      {/* Upcoming Exams Section */}
+      {/* EXAMS Table (final, exam) */}
       <div className="bg-white rounded-xl shadow-lg overflow-hidden mb-8 animate-slideInUp" style={{animationDelay: '0.5s'}}>
-        <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white p-4">
-          <h2 className="text-xl font-semibold">📝 Upcoming Exams ({upcomingExams.length})</h2>
+        <div className="bg-gradient-to-r from-red-600 to-red-800 text-white p-4">
+          <h2 className="text-xl font-semibold">🎯 Exams ({exams.length})</h2>
         </div>
         
         <div className="p-6">
-          {upcomingExams.length === 0 ? (
+          {exams.length === 0 ? (
             <div className="text-center py-8">
-              <div className="text-4xl mb-2">📝</div>
-              <p className="text-gray-500">No upcoming exams scheduled.</p>
+              <div className="text-4xl mb-2">🎯</div>
+              <p className="text-gray-500">No exams scheduled.</p>
             </div>
           ) : (
             <div className="grid gap-4">
-              {upcomingExams.map((exam, index) => {
+              {exams.map((exam, index) => {
                 const daysUntil = getDaysUntil(exam.date);
                 return (
                   <div key={exam._id || index} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-all duration-300 transform hover:scale-[1.02]">
@@ -178,7 +183,7 @@ export default function Exams() {
                           <span>📅 {new Date(exam.date).toLocaleDateString()}</span>
                           <span>⏰ {exam.startTime} - {exam.endTime}</span>
                           <span>🏫 {exam.room}</span>
-                          <span>⏱️ {exam.duration}</span>
+                          <span>⏱️ {exam.durationMinutes || exam.duration} min</span>
                         </div>
                       </div>
                       <div className="text-right ml-4">
@@ -191,7 +196,6 @@ export default function Exams() {
                         </div>
                       </div>
                     </div>
-                    <div className="text-xs text-gray-500">ID: {exam.examId}</div>
                   </div>
                 );
               })}
@@ -200,39 +204,57 @@ export default function Exams() {
         </div>
       </div>
 
-      {/* Completed Exams Section */}
-      {completedExams.length > 0 && (
-        <div className="bg-white rounded-xl shadow-lg overflow-hidden animate-slideInUp" style={{animationDelay: '0.6s'}}>
-          <div className="bg-gradient-to-r from-gray-600 to-gray-800 text-white p-4">
-            <h2 className="text-xl font-semibold">✅ Completed Exams ({completedExams.length})</h2>
-          </div>
-          
-          <div className="p-6">
+      {/* TESTS Table (quiz, test, midterm) */}
+      <div className="bg-white rounded-xl shadow-lg overflow-hidden animate-slideInUp" style={{animationDelay: '0.6s'}}>
+        <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white p-4">
+          <h2 className="text-xl font-semibold">📝 Tests & Quizzes ({tests.length})</h2>
+        </div>
+        
+        <div className="p-6">
+          {tests.length === 0 ? (
+            <div className="text-center py-8">
+              <div className="text-4xl mb-2">📝</div>
+              <p className="text-gray-500">No tests scheduled.</p>
+            </div>
+          ) : (
             <div className="grid gap-4">
-              {completedExams.map((exam, index) => (
-                <div key={exam._id || index} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-all duration-300 transform hover:scale-[1.02] opacity-75">
-                  <div className="flex items-start justify-between mb-3">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-2">
-                        <h3 className="text-lg font-semibold text-gray-600">{exam.title}</h3>
-                        <span className={`px-2 py-1 rounded-full text-xs font-medium border ${getTypeColor(exam.type)}`}>
-                          {getTypeIcon(exam.type)} {exam.type}
-                        </span>
+              {tests.map((test, index) => {
+                const daysUntil = getDaysUntil(test.date);
+                return (
+                  <div key={test._id || index} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-all duration-300 transform hover:scale-[1.02]">
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3 mb-2">
+                          <h3 className="text-lg font-semibold text-gray-800">{test.title}</h3>
+                          <span className={`px-2 py-1 rounded-full text-xs font-medium border ${getTypeColor(test.type)}`}>
+                            {getTypeIcon(test.type)} {test.type}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-4 text-sm text-gray-500 mb-2">
+                          <span>📚 {test.subject}</span>
+                          <span>📅 {new Date(test.date).toLocaleDateString()}</span>
+                          <span>⏰ {test.startTime} - {test.endTime}</span>
+                          <span>🏫 {test.room}</span>
+                          <span>⏱️ {test.durationMinutes || test.duration} min</span>
+                        </div>
                       </div>
-                      <div className="flex items-center gap-4 text-sm text-gray-400 mb-2">
-                        <span>📚 {exam.subject}</span>
-                        <span>📅 {new Date(exam.date).toLocaleDateString()}</span>
-                        <span>🏫 {exam.room}</span>
+                      <div className="text-right ml-4">
+                        <div className="text-sm text-gray-500 mb-1">Days left</div>
+                        <div className={`text-lg font-bold ${
+                          daysUntil < 0 ? 'text-red-600' : 
+                          daysUntil <= 7 ? 'text-yellow-600' : 'text-green-600'
+                        }`}>
+                          {daysUntil < 0 ? 'Past' : daysUntil}
+                        </div>
                       </div>
                     </div>
                   </div>
-                  <div className="text-xs text-gray-400">ID: {exam.examId}</div>
-                </div>
-              ))}
+                );
+              })}
             </div>
-          </div>
+          )}
         </div>
-      )}
+      </div>
     </div>
   );
 }
