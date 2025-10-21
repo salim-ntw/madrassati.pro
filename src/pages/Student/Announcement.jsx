@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { studentAPI } from "../../api/student";
 
-export default function Announcement() {
-  const { id: studentId } = useParams();
+export default function Announcement({ studentId: propStudentId }) {
+  const { id: paramStudentId } = useParams();
+  const studentId = propStudentId || paramStudentId; // Use prop if provided, otherwise use URL param
   const [announcements, setAnnouncements] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);

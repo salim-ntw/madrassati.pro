@@ -23,6 +23,28 @@ import StudentProfile from "./pages/Student/Profile.jsx";
 
 //teacher sub pages
 import TeacherProfile from "./pages/Teacher/sections/Profile.jsx";
+import TeacherHome from "./pages/Teacher/sections/Home.jsx";
+import TeacherSchedule from "./pages/Teacher/sections/Schedule.jsx";
+import TeacherClasses from "./pages/Teacher/sections/Classes.jsx";
+import TeacherManageGrades from "./pages/Teacher/sections/ManageGrades.jsx";
+import TeacherManageHomework from "./pages/Teacher/sections/ManageHomework.jsx";
+import TeacherExams from "./pages/Teacher/sections/Exams.jsx";
+import AddTestExam from "./pages/Teacher/sections/AddTestExam.jsx";
+import TeacherAnnouncements from "./pages/Teacher/sections/Announcements.jsx";
+import TeacherMessages from "./pages/Teacher/sections/Messages.jsx";
+import TeacherAttendance from "./pages/Teacher/sections/Attendance.jsx";
+
+//parent sub pages
+import ParentHome from "./pages/Parent/sections/Home.jsx";
+import ParentProfile from "./pages/Parent/sections/Profile.jsx";
+import ParentSchedule from "./pages/Parent/sections/Schedule.jsx";
+import ParentGrades from "./pages/Parent/sections/Grades.jsx";
+import ParentHomework from "./pages/Parent/sections/Homework.jsx";
+import ParentExams from "./pages/Parent/sections/Exams.jsx";
+import ParentAnnouncements from "./pages/Parent/sections/Announcements.jsx";
+import ParentMessages from "./pages/Parent/sections/Messages.jsx";
+import ParentAttendance from "./pages/Parent/sections/Attendance.jsx";
+
 const App = () => {
   useScrollReveal();
   
@@ -55,24 +77,46 @@ const App = () => {
             <Route path="announcements" element={<Announcements />} />
           </Route>
 
-          {/* Parent routes with dynamic ID - Protected */}
-          <Route path="/parent/:id/dashboard" element={
+          {/* Parent routes with child selection - Protected and nested */}
+          <Route path="/parent/:parentId" element={
             <ProtectedRoute allowedRoles={['parent']}>
               <Parent />
             </ProtectedRoute>
-          } />
+          }>
+            {/* Parent's own profile route (accessible without child selection) */}
+            <Route path="profile" element={<ParentProfile />} />
+            
+            {/* Child-specific routes */}
+            <Route path="child/:childId/dashboard" element={<ParentHome />} />
+            <Route path="child/:childId/schedule" element={<ParentSchedule />} />
+            <Route path="child/:childId/grades" element={<ParentGrades />} />
+            <Route path="child/:childId/homework" element={<ParentHomework />} />
+            <Route path="child/:childId/exams" element={<ParentExams />} />
+            <Route path="child/:childId/announcements" element={<ParentAnnouncements />} />
+            <Route path="child/:childId/attendance" element={<ParentAttendance />} />
+            <Route path="child/:childId/messages" element={<ParentMessages />} />
+          </Route>
 
-          {/* Teacher routes with dynamic ID - Protected */}
-          <Route path="/teacher/:id/dashboard" element={
+          {/* Teacher routes with dynamic ID - Protected and nested */}
+          <Route path="/teacher/:teacherId" element={
             <ProtectedRoute allowedRoles={['teacher']}>
               <Teacher />
             </ProtectedRoute>
-          } />
-          <Route path="/teacher/:id/profile" element={
-            <ProtectedRoute allowedRoles={['teacher']}>
-              <TeacherProfile />
-            </ProtectedRoute>
-          } />
+          }>
+            <Route index element={<TeacherHome />} />
+            <Route path="dashboard" element={<TeacherHome />} />
+            <Route path="profile" element={<TeacherProfile />} />
+            <Route path="schedule" element={<TeacherSchedule />} />
+            <Route path="classes" element={<TeacherClasses />} />
+            <Route path="manage-grades" element={<TeacherManageGrades />} />
+            <Route path="manage-homework" element={<TeacherManageHomework />} />
+            <Route path="exams" element={<TeacherExams />} />
+            <Route path="add-test-exam" element={<AddTestExam />} />
+            <Route path="announcements" element={<TeacherAnnouncements />} />
+            <Route path="messages" element={<TeacherMessages />} />
+            <Route path="attendance" element={<TeacherAttendance />} />
+            {/* removed create-students route */}
+          </Route>
         </Routes>
       </Router>
     </LanguageProvider>

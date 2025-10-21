@@ -27,7 +27,11 @@ const Auth = () => {
     confirmPassword: '',
     phone: '',
     gender: '',
-    role: ''
+    role: '',
+    subject: '',
+    classes: '',
+    className: '',
+    childrenEmails: ['']
   });
   const [registerError, setRegisterError] = useState('');
   const [registerSuccess, setRegisterSuccess] = useState('');
@@ -61,9 +65,10 @@ const Auth = () => {
         console.log('👤 User data:', response.data.user);
         console.log('🎭 Detected role:', response.data.user.role);
         console.log('🆔 User ID:', response.data.user.id);
+        console.log('🔑 Role Specific ID:', response.data.user.roleSpecificId);
         
-        // Redirect based on role
-        const redirectPath = getRedirectPath(response.data.user.role, response.data.user.id);
+        // Redirect based on role using the user object
+        const redirectPath = getRedirectPath(response.data.user);
         console.log('🔄 Redirecting to:', redirectPath);
         
         // Force navigation with a small delay to ensure state is saved
@@ -88,6 +93,22 @@ const Auth = () => {
 
     // Check if all fields are filled
     const requiredFields = ['name', 'email', 'password', 'confirmPassword', 'phone', 'gender', 'role'];
+    
+    // Add teacher-specific fields if role is teacher
+    if (registerData.role === 'teacher') {
+      requiredFields.push('subject', 'classes');
+    }
+    
+    // Add parent-specific validation if role is parent
+    if (registerData.role === 'parent') {
+      // Check if at least one child email is provided
+      const validChildEmails = registerData.childrenEmails.filter(email => email.trim() !== '');
+      if (validChildEmails.length === 0) {
+        setRegisterError('Please provide at least one child email address.');
+        return;
+      }
+    }
+    
     const emptyFields = requiredFields.filter(field => !registerData[field]);
     
     if (emptyFields.length > 0) {
@@ -104,7 +125,18 @@ const Auth = () => {
     setRegisterLoading(true);
 
     try {
-      const response = await authAPI.register(registerData);
+      // Prepare registration data
+      const payload = {
+        ...registerData,
+        classes: registerData.classes
+          ? registerData.classes.split(",").map(c => c.trim())
+          : [],
+        childrenEmails: registerData.role === 'parent' 
+          ? registerData.childrenEmails.filter(email => email.trim() !== '')
+          : undefined
+      };
+
+      const response = await authAPI.register(payload);
       
       if (response.success) {
         setRegisterSuccess('Registration successful!');
@@ -143,6 +175,36 @@ const Auth = () => {
     }));
     if (registerError) setRegisterError('');
     if (registerSuccess) setRegisterSuccess('');
+  };
+
+  // Handle child email input changes
+  const handleChildEmailChange = (index, value) => {
+    setRegisterData(prev => ({
+      ...prev,
+      childrenEmails: prev.childrenEmails.map((email, i) => 
+        i === index ? value : email
+      )
+    }));
+    if (registerError) setRegisterError('');
+    if (registerSuccess) setRegisterSuccess('');
+  };
+
+  // Add new child email field
+  const addChildEmailField = () => {
+    setRegisterData(prev => ({
+      ...prev,
+      childrenEmails: [...prev.childrenEmails, '']
+    }));
+  };
+
+  // Remove child email field
+  const removeChildEmailField = (index) => {
+    if (registerData.childrenEmails.length > 1) {
+      setRegisterData(prev => ({
+        ...prev,
+        childrenEmails: prev.childrenEmails.filter((_, i) => i !== index)
+      }));
+    }
   };
 
   return (
@@ -282,7 +344,7 @@ const Auth = () => {
               </div>
             </form>
           ) : (
-            <form onSubmit={handleRegister} className="flex flex-col w-full max-w-md gap-4 animate-slideInUp">
+            <form onSubmit={handleRegister} className="flex flex-col w-full max-w-md gap-4 animate-slideInUp max-h-[80vh] overflow-y-auto">
               <div className="text-center mb-4">
                 <h2 className="text-2xl font-bold text-gray-800 mb-2">
                   Create Account
@@ -356,6 +418,103 @@ const Auth = () => {
                     <option value="parent">Parent</option>
                   </select>
                 </div>
+
+                {/* Teacher-specific fields - only show when role is teacher */}
+                {registerData.role === 'teacher' && (
+                  <div className="border-2 border-blue-500 bg-blue-50 p-4 rounded-xl mt-4">
+                    <h3 className="text-lg font-bold text-blue-800 mb-3">Teacher Information</h3>
+                    <div className="space-y-3">
+                      <div>
+                        <label className="block text-sm font-medium mb-1 text-blue-700">Subject *</label>
+                        <input
+                          type="text"
+                          name="subject"
+                          placeholder="Enter subject (e.g. Math)"
+                          value={registerData.subject}
+                          onChange={handleRegisterInputChange}
+                          className="w-full border-2 border-blue-300 p-3 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                          required
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-1 text-blue-700">Classes *</label>
+                        <input
+                          type="text"
+                          name="classes"
+                          placeholder="Enter classes (comma-separated, e.g. 3A,3B)"
+                          value={registerData.classes}
+                          onChange={handleRegisterInputChange}
+                          className="w-full border-2 border-blue-300 p-3 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                          required
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Student-specific fields - only show when role is student */}
+                {registerData.role === 'student' && (
+                  <div className="border-2 border-purple-500 bg-purple-50 p-4 rounded-xl mt-4">
+                    <h3 className="text-lg font-bold text-purple-800 mb-3">Student Information</h3>
+                    <div>
+                      <label className="block text-sm font-medium mb-1 text-purple-700">Class Name</label>
+                      <input
+                        type="text"
+                        name="className"
+                        placeholder="Enter your class (e.g. 2AM1, 3AM2, etc.)"
+                        value={registerData.className}
+                        onChange={handleRegisterInputChange}
+                        className="w-full border-2 border-purple-300 p-3 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300"
+                      />
+                      <p className="text-xs text-purple-600 mt-1">
+                        💡 This is optional - you can be assigned to a class later by your teacher
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                {/* Parent-specific fields - only show when role is parent */}
+                {registerData.role === 'parent' && (
+                  <div className="border-2 border-green-500 bg-green-50 p-4 rounded-xl mt-4">
+                    <h3 className="text-lg font-bold text-green-800 mb-3">Children Information</h3>
+                    <p className="text-sm text-green-700 mb-3">Enter your children's email addresses (must be registered students)</p>
+                    
+                    <div className="space-y-3">
+                      {registerData.childrenEmails.map((email, index) => (
+                        <div key={index} className="flex gap-2 items-center">
+                          <input
+                            type="email"
+                            placeholder={`Child ${index + 1} email address`}
+                            value={email}
+                            onChange={(e) => handleChildEmailChange(index, e.target.value)}
+                            className="flex-1 border-2 border-green-300 p-3 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-300"
+                          />
+                          {registerData.childrenEmails.length > 1 && (
+                            <button
+                              type="button"
+                              onClick={() => removeChildEmailField(index)}
+                              className="bg-red-500 text-white px-3 py-3 rounded-xl hover:bg-red-600 transition-colors duration-300"
+                            >
+                              ✕
+                            </button>
+                          )}
+                        </div>
+                      ))}
+                      
+                      <button
+                        type="button"
+                        onClick={addChildEmailField}
+                        className="w-full bg-green-500 text-white py-2 px-4 rounded-xl hover:bg-green-600 transition-colors duration-300 text-sm"
+                      >
+                        + Add Another Child
+                      </button>
+                    </div>
+                    
+                    <p className="text-xs text-green-600 mt-3">
+                      💡 Make sure your children are already registered as students in the system
+                    </p>
+                  </div>
+                )}
               </div>
 
               {registerError && (
@@ -373,7 +532,7 @@ const Auth = () => {
               <button
                 type="submit"
                 disabled={registerLoading}
-                className="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-4 rounded-xl font-semibold hover:from-blue-700 hover:to-blue-900 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+                className="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-4 rounded-xl font-semibold hover:from-blue-700 hover:to-blue-900 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed mt-6 sticky bottom-0 z-10"
               >
                 {registerLoading ? 'Creating Account...' : 'Create Account'}
               </button>

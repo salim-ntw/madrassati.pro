@@ -75,19 +75,22 @@ export const storage = {
 };
 
 // Role-based redirect helper
-export const getRedirectPath = (role, userId) => {
-  console.log('🔍 getRedirectPath called with:', { role, userId });
+export const getRedirectPath = (user) => {
+  console.log('🔍 getRedirectPath called with user:', user);
+  
+  const { role, roleSpecificId, id } = user;
+  const redirectId = roleSpecificId || id; // Use roleSpecificId if available, fallback to userId
   
   let path;
   switch (role) {
     case 'student':
-      path = `/student/${userId}/dashboard`;
+      path = `/student/${redirectId}/dashboard`;
       break;
     case 'parent':
-      path = `/parent/${userId}/dashboard`;
+      path = `/parent/${redirectId}`; // This is now the parentId from Parent collection
       break;
     case 'teacher':
-      path = `/teacher/${userId}/dashboard`;
+      path = `/teacher/${redirectId}/dashboard`;
       break;
     default:
       path = '/login';

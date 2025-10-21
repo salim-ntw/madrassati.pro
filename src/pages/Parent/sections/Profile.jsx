@@ -1,7 +1,90 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useOutletContext, useParams } from "react-router-dom";
+import { parentAPI } from "../../../api/parent";
 import profPic from "../../../assets/graduated.png";
 
-export default function Profile({ parent, children }) {
+export default function Profile() {
+  const outletContext = useOutletContext();
+  const { parentData: contextParentData, children: contextChildren } = outletContext || {};
+  const { parentId } = useParams();
+  const [parent, setParent] = useState(null);
+  const [children, setChildren] = useState(contextChildren || []);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Always fetch full parent profile
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        setLoading(true);
+        console.log('🔍 Fetching parent profile for ID:', parentId);
+        
+        const response = await parentAPI.getProfile(parentId);
+        console.log('✅ Profile data received:', response.data);
+        
+        const profileData = response.data.data;
+        setParent(profileData);
+        
+        // If children data is in the profile response, use it
+        if (profileData.children && profileData.children.length > 0) {
+          const childrenData = profileData.children.map(child => ({
+            id: child._id || child.id,
+            name: child.name,
+            grade: child.className || child.gradeLevel || child.grade || 'Not Assigned',
+            email: child.email,
+            gpa: child.gpa
+          }));
+          setChildren(childrenData);
+        } else if (contextChildren) {
+          setChildren(contextChildren);
+        }
+        
+        setError(null);
+      } catch (err) {
+        console.error('❌ Error fetching profile:', err);
+        setError(err.response?.data?.message || err.message || 'Failed to load profile');
+        
+        // Fallback to context data if available
+        if (contextParentData) {
+          setParent(contextParentData);
+          setChildren(contextChildren || []);
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (parentId) {
+      fetchProfile();
+    }
+  }, [parentId]);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center p-8">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading profile...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error && !parent) {
+    return (
+      <div className="flex items-center justify-center p-8">
+        <div className="bg-red-50 border border-red-200 rounded-xl p-6 text-center max-w-md">
+          <p className="text-red-600 font-semibold mb-4">⚠️ {error}</p>
+          <button 
+            onClick={() => window.location.reload()} 
+            className="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
   const stats = [
     {
       label: "Children",
@@ -9,15 +92,28 @@ export default function Profile({ parent, children }) {
       color: "bg-blue-500",
       icon: "👶",
     },
-    { label: "Messages", value: "12", color: "bg-green-500", icon: "💬" },
-    { label: "Meetings", value: "3", color: "bg-purple-500", icon: "📅" },
-    { label: "Alerts", value: "1", color: "bg-orange-500", icon: "🔔" },
+    { 
+      label: "Messages", 
+      value: String(parent?.messagesCount || 0), 
+      color: "bg-green-500", 
+      icon: "💬" 
+    },
+    { 
+      label: "Meetings", 
+      value: String(parent?.meetingsCount || 0), 
+      color: "bg-purple-500", 
+      icon: "📅" 
+    },
+    { 
+      label: "Alerts", 
+      value: String(parent?.alertsCount || 0), 
+      color: "bg-orange-500", 
+      icon: "🔔" 
+    },
   ];
 
-  const upcoming = [
-    { title: "Parents Meeting", date: "2025-02-15", time: "10:00 AM" },
-    { title: "Report Cards", date: "2025-03-01", time: "—" },
-  ];
+  // Use upcoming events from parent data or default empty array
+  const upcoming = parent?.upcomingEvents || [];
 
   return (
     <div className="p-6 animate-fadeIn">
@@ -127,30 +223,36 @@ export default function Profile({ parent, children }) {
 
               <div>
                 <h4 className="text-lg font-semibold text-gray-800 mb-4">
-                  📅 Upcoming
+                  📅 Upcoming Events
                 </h4>
                 <div className="space-y-3">
-                  {upcoming.map((e, i) => (
-                    <div
-                      key={i}
-                      className="flex items-center justify-between p-3 bg-blue-50 rounded-lg hover:bg-blue-100 transition-all duration-300 transform hover:scale-[1.02]"
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
-                        <div>
-                          <p className="font-medium text-gray-800">{e.title}</p>
-                          <p className="text-sm text-gray-600">
-                            {new Date(e.date).toLocaleDateString()}
+                  {upcoming.length > 0 ? (
+                    upcoming.map((e, i) => (
+                      <div
+                        key={i}
+                        className="flex items-center justify-between p-3 bg-blue-50 rounded-lg hover:bg-blue-100 transition-all duration-300 transform hover:scale-[1.02]"
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+                          <div>
+                            <p className="font-medium text-gray-800">{e.title}</p>
+                            <p className="text-sm text-gray-600">
+                              {new Date(e.date).toLocaleDateString()}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-sm font-medium text-blue-600">
+                            {e.time}
                           </p>
                         </div>
                       </div>
-                      <div className="text-right">
-                        <p className="text-sm font-medium text-blue-600">
-                          {e.time}
-                        </p>
-                      </div>
+                    ))
+                  ) : (
+                    <div className="p-4 bg-gray-50 rounded-lg text-center">
+                      <p className="text-gray-500 text-sm">No upcoming events</p>
                     </div>
-                  ))}
+                  )}
                 </div>
               </div>
             </div>

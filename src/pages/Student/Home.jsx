@@ -116,7 +116,7 @@ export default function Home() {
   if (dashboardData.recentActivities?.grades) {
     dashboardData.recentActivities.grades.slice(0, 2).forEach(grade => {
       recentActivities.push({
-        action: `📊 New grade posted for ${grade.subject}: ${grade.finalGrade}%`,
+        action: `📊 New grade posted for ${grade.subject}: ${grade.finalGrade}/20`,
         time: 'Recently',
         type: 'grade'
       });
@@ -138,7 +138,7 @@ export default function Home() {
   }
 
   return (
-    <div className='flex flex-col gap-6 animate-fadeIn'>
+    <div className='flex flex-col gap-4 md:gap-6 animate-fadeIn mobile-padding'>
       {/* Welcome Component */}
       <Welcome />
 
@@ -149,15 +149,15 @@ export default function Home() {
       </div> */}
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mobile-grid-2">
         {stats.map((stat, index) => (
-          <div key={index} className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 transform hover:scale-105 animate-slideInUp" style={{animationDelay: `${index * 0.1}s`}}>
+          <div key={index} className="bg-white rounded-xl shadow-lg p-4 md:p-6 hover:shadow-xl transition-all duration-300 transform hover:scale-105 animate-slideInUp mobile-card" style={{animationDelay: `${index * 0.1}s`}}>
             <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">{stat.title}</p>
-                <p className="text-3xl font-bold text-gray-900">{stat.value}</p>
+              <div className="flex-1 min-w-0">
+                <p className="text-xs md:text-sm font-medium text-gray-600 truncate">{stat.title}</p>
+                <p className="text-xl md:text-3xl font-bold text-gray-900">{stat.value}</p>
               </div>
-              <div className={`w-12 h-12 ${stat.color} rounded-lg flex items-center justify-center text-2xl`}>
+              <div className={`w-10 h-10 md:w-12 md:h-12 ${stat.color} rounded-lg flex items-center justify-center text-xl md:text-2xl flex-shrink-0`}>
                 {stat.icon}
               </div>
             </div>

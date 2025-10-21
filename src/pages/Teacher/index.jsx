@@ -1,41 +1,29 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
 import SideBar from "./side/SideBar";
-import Home from "./sections/Home";
-import Schedule from "./sections/Schedule";
-import Classes from "./sections/Classes";
-import ManageGrades from "./sections/ManageGrades";
-import ManageHomework from "./sections/ManageHomework";
-import Exams from "./sections/Exams";
-import Announcements from "./sections/Announcements";
-import Messages from "./sections/Messages";
-import Attendance from "./sections/Attendance";
-import CreateStudents from "./sections/CreateStudents";
-import Profile from "./sections/Profile";
 
 function Index() {
-  const [selectedTab, setSelectedTab] = React.useState("");
   const [sidebarOpen, setSidebarOpen] = React.useState(false);
   
   return (
     <div className="min-h-screen bg-gray-200">
       {/* Mobile Header */}
-      <div className="lg:hidden bg-white shadow-lg p-4 flex items-center justify-between">
+      <div className="lg:hidden bg-white shadow-lg p-3 md:p-4 flex items-center justify-between sticky top-0 z-50">
         <button 
           onClick={() => setSidebarOpen(!sidebarOpen)}
-          className="p-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors"
+          className="p-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors touch-target"
         >
           ☰
         </button>
-        <h1 className="text-xl font-bold text-gray-800">Teacher Portal</h1>
+        <h1 className="text-lg md:text-xl font-bold text-gray-800">Teacher Portal</h1>
         <div className="w-8"></div>
       </div>
 
       <div className="flex">
         {/* Sidebar */}
-        <div className={`${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 fixed lg:static inset-y-0 left-0 z-50 w-80 lg:w-auto lg:flex-shrink-0 transition-transform duration-300 ease-in-out`}>
+        <div className={`${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 fixed lg:static inset-y-0 left-0 z-50 w-80 lg:w-auto lg:flex-shrink-0 transition-transform duration-300 ease-in-out mobile-sidebar`}>
           <div className="h-full lg:h-auto">
-            <SideBar setSelectedTab={setSelectedTab} />
+            <SideBar />
           </div>
         </div>
 
@@ -48,18 +36,8 @@ function Index() {
         )}
 
         {/* Main Content */}
-        <div className="flex-1 lg:col-span-9 p-4 lg:p-6 flex flex-col gap-6 min-h-screen">
+        <div className="flex-1 lg:col-span-9 p-3 md:p-4 lg:p-6 flex flex-col gap-4 md:gap-6 min-h-screen">
           <Outlet />
-          {selectedTab === "" && <Home />}
-          {selectedTab === "schedule" && <Schedule />}
-          {selectedTab === "classes" && <Classes />}
-          {selectedTab === "manage-grades" && <ManageGrades />}
-          {selectedTab === "manage-homework" && <ManageHomework />}
-          {selectedTab === "exams" && <Exams />}
-          {selectedTab === "announcements" && <Announcements />}
-          {selectedTab === "messages" && <Messages />}
-          {selectedTab === "attendance" && <Attendance />}
-          {selectedTab === "create-students" && <CreateStudents />}
         </div>
       </div>
     </div>

@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { studentAPI } from "../../api/student";
 
-export default function Homework() {
-  const { id: studentId } = useParams();
+export default function Homework({ studentId: propStudentId }) {
+  const { id: paramStudentId } = useParams();
+  const studentId = propStudentId || paramStudentId; // Use prop if provided, otherwise use URL param
   const [homework, setHomework] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -11,15 +12,15 @@ export default function Homework() {
   useEffect(() => {
     const fetchHomework = async () => {
       try {
-        console.log('📝 Fetching homework for student:', studentId);
+        console.log('📚 Fetching homeworks for student:', studentId);
         setLoading(true);
-        const response = await studentAPI.getHomework(studentId);
-        console.log('✅ Homework data received:', response.data);
-        setHomework(response.data.data.homework || []);
+        const response = await studentAPI.getHomeworks(studentId);
+        console.log('✅ Homeworks data received:', response.data);
+        setHomework(response.data.data.homeworks || []);
         setError(null);
       } catch (err) {
-        console.error('❌ Error fetching homework:', err);
-        setError(err.message || 'Failed to load homework');
+        console.error('❌ Error fetching homeworks:', err);
+        setError(err.message || 'Failed to load homeworks');
       } finally {
         setLoading(false);
       }

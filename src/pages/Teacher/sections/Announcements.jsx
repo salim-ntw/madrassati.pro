@@ -1,6 +1,9 @@
 import React from 'react'
+import { useParams } from 'react-router-dom'
+import { teacherAPI } from '../../../api/teacher'
 
 export default function Announcements() {
+  const { teacherId } = useParams()
   const [announcements, setAnnouncements] = React.useState([
     { 
       id: 'A001', 
@@ -32,22 +35,96 @@ export default function Announcements() {
   const [showEdit, setShowEdit] = React.useState(false)
   const [showDelete, setShowDelete] = React.useState(false)
   const [selectedId, setSelectedId] = React.useState('')
-  const [form, setForm] = React.useState({ title: '', content: '', date: '', targetAudience: '', priority: 'medium' })
+  const [form, setForm] = React.useState({ title: '', content: '', date: '', targetClasses: [], priority: 'medium' })
   const [editForm, setEditForm] = React.useState({ id: '', title: '', content: '', date: '', targetAudience: '', priority: 'medium' })
 
+  const [teacherClasses, setTeacherClasses] = React.useState([])
+  const [loadingClasses, setLoadingClasses] = React.useState(false)
+  const [error, setError] = React.useState(null)
+  const [classQuery, setClassQuery] = React.useState('')
+  const [dropdownOpen, setDropdownOpen] = React.useState(false)
+
+  React.useEffect(() => {
+    const fetchClasses = async () => {
+      if (!teacherId) return
+      try {
+        setLoadingClasses(true)
+        const res = await teacherAPI.getClasses(teacherId)
+        // Expecting res.data.data.classes to be an array of { className, subject, ... }
+        const cls = res.data?.data?.classes || []
+        setTeacherClasses(cls)
+        setError(null)
+      } catch (e) {
+        setError(e?.response?.data?.error || e.message || 'Failed to load classes')
+      } finally {
+        setLoadingClasses(false)
+      }
+    }
+    fetchClasses()
+  }, [teacherId])
+
   const handleChange = (e) => {
-    const { name, value } = e.target
-    setForm((f) => ({ ...f, [name]: value }))
+    const { name, value, options, multiple } = e.target
+    if (multiple) {
+      const vals = Array.from(options).filter(o => o.selected).map(o => o.value)
+      setForm((f) => ({ ...f, [name]: vals }))
+    } else {
+      setForm((f) => ({ ...f, [name]: value }))
+    }
   }
 
-  const handleSubmit = (e) => {
+  const filteredClasses = React.useMemo(() => {
+    if (!classQuery) return teacherClasses
+    const q = classQuery.toLowerCase()
+    return teacherClasses.filter(c => String(c.className).toLowerCase().includes(q))
+  }, [teacherClasses, classQuery])
+
+  const toggleClassSelection = (className) => {
+    setForm((f) => {
+      const set = new Set(f.targetClasses)
+      if (set.has(className)) set.delete(className)
+      else set.add(className)
+      return { ...f, targetClasses: Array.from(set) }
+    })
+  }
+
+  const selectAllClasses = () => {
+    setForm((f) => ({ ...f, targetClasses: teacherClasses.map(c => c.className) }))
+  }
+
+  const clearAllClasses = () => {
+    setForm((f) => ({ ...f, targetClasses: [] }))
+  }
+
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    if (!form.title || !form.content || !form.date || !form.targetAudience) return
-    
-    const id = 'A' + String(Math.floor(Math.random()*10000)).padStart(3,'0')
-    setAnnouncements((ann) => [...ann, { id, ...form }])
-    setForm({ title: '', content: '', date: '', targetAudience: '', priority: 'medium' })
-    setShowAdd(false)
+    if (!form.title || !form.content || !form.date || !form.targetClasses?.length) return
+    try {
+      const payload = {
+        title: form.title,
+        content: form.content,
+        date: form.date,
+        priority: form.priority,
+        targetClasses: form.targetClasses,
+        postedBy: 'Teacher'
+      }
+      const res = await teacherAPI.addAnnouncement(teacherId, payload)
+      const saved = res.data?.data
+      // Append to UI list (newest first)
+      setAnnouncements((ann) => [{
+        id: saved?.announcementId || ('A' + Math.floor(Math.random()*10000)),
+        title: saved?.title || form.title,
+        content: saved?.content || form.content,
+        date: saved?.date || form.date,
+        targetAudience: (saved?.targetClasses && saved.targetClasses.join(', ')) || (saved?.className || ''),
+        priority: saved?.priority || form.priority
+      }, ...ann])
+      setForm({ title: '', content: '', date: '', targetClasses: [], priority: 'medium' })
+      setShowAdd(false)
+      setError(null)
+    } catch (err) {
+      setError(err?.response?.data?.message || err.message || 'Failed to add announcement')
+    }
   }
 
   const editAnnouncement = (announcement) => {
@@ -162,17 +239,73 @@ export default function Announcements() {
                   <input type='date' name='date' value={form.date} onChange={handleChange} className='w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all duration-300' required />
                 </div>
                 <div>
-                  <label className='block text-sm font-medium text-gray-700 mb-1'>Target Audience</label>
-                  <select name='targetAudience' value={form.targetAudience} onChange={handleChange} className='w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all duration-300' required>
-                    <option value=''>Select audience</option>
-                    <option value='All Classes'>All Classes</option>
-                    <option value='Class 1A'>Class 1A</option>
-                    <option value='Class 1B'>Class 1B</option>
-                    <option value='Class 2A'>Class 2A</option>
-                    <option value='Class 3B'>Class 3B</option>
-                    <option value='All Parents'>All Parents</option>
-                    <option value='All Students'>All Students</option>
-                  </select>
+                  <label className='block text-sm font-medium text-gray-700 mb-1'>Target Classes</label>
+                  <div className='relative'>
+                    {/* Display (closed) */}
+                    <button
+                      type='button'
+                      onClick={()=>setDropdownOpen((o)=>!o)}
+                      className='w-full border border-gray-300 rounded-lg px-3 py-2 bg-white text-left shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 transition'
+                    >
+                      {form.targetClasses.length === 0 ? (
+                        <span className='text-gray-400'>Select classes…</span>
+                      ) : (
+                        <div className='flex flex-wrap gap-2'>
+                          {form.targetClasses.map(c => (
+                            <span key={c} className='inline-flex items-center gap-1 text-xs bg-purple-50 text-purple-700 border border-purple-200 px-2 py-1 rounded'>
+                              {c}
+                              <span onClick={(e)=>{e.stopPropagation(); toggleClassSelection(c)}} className='cursor-pointer hover:text-purple-900'>×</span>
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                    </button>
+
+                    {/* Dropdown (open) */}
+                    {dropdownOpen && (
+                      <div className='absolute z-20 mt-2 w-full bg-white border border-gray-200 rounded-lg shadow-lg animate-fadeIn'>
+                        <div className='p-2 border-b border-gray-100 flex items-center gap-2'>
+                          <input
+                            type='text'
+                            value={classQuery}
+                            onChange={(e)=>setClassQuery(e.target.value)}
+                            placeholder='Search classes…'
+                            className='w-full border border-gray-200 rounded-md px-2 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500'
+                          />
+                        </div>
+                        <div className='max-h-56 overflow-auto p-2'>
+                          {loadingClasses && (
+                            <div className='text-sm text-gray-500 px-1 py-2'>Loading classes…</div>
+                          )}
+                          {!loadingClasses && filteredClasses?.length === 0 && (
+                            <div className='text-sm text-gray-500 px-1 py-2'>No classes found</div>
+                          )}
+                          {filteredClasses?.map((cls) => {
+                            const selected = form.targetClasses.includes(cls.className)
+                            return (
+                              <label key={cls.className} className='flex items-center gap-2 px-2 py-2 rounded hover:bg-gray-50 cursor-pointer text-sm'>
+                                <input
+                                  type='checkbox'
+                                  checked={selected}
+                                  onChange={()=>toggleClassSelection(cls.className)}
+                                  className='accent-purple-600'
+                                />
+                                <span className='flex-1'>{cls.className}</span>
+                                {selected && <span className='text-purple-600 text-xs'>Selected</span>}
+                              </label>
+                            )
+                          })}
+                        </div>
+                        <div className='flex items-center justify-between px-3 py-2 border-t border-gray-100 bg-gray-50 rounded-b-lg'>
+                          <button type='button' onClick={selectAllClasses} className='text-xs text-gray-600 hover:text-gray-800'>Select All</button>
+                          <div className='flex items-center gap-2'>
+                            <button type='button' onClick={clearAllClasses} className='text-xs text-gray-600 hover:text-gray-800'>Clear All</button>
+                            <button type='button' onClick={()=>setDropdownOpen(false)} className='text-xs bg-purple-600 text-white px-2 py-1 rounded hover:bg-purple-700'>Done</button>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
               

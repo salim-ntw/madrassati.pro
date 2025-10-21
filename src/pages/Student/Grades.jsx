@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { studentAPI } from "../../api/student";
 
-export default function Grades() {
-  const { id: studentId } = useParams();
+export default function Grades({ studentId: propStudentId }) {
+  const { id: paramStudentId } = useParams();
+  const studentId = propStudentId || paramStudentId; // Use prop if provided, otherwise use URL param
   const [grades, setGrades] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -31,14 +32,14 @@ export default function Grades() {
   }, [studentId]);
 
   const getGradeColor = (grade) => {
-    if (grade >= 80) return 'bg-green-100 text-green-800 border-green-200';
-    if (grade >= 60) return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+    if (grade >= 16) return 'bg-green-100 text-green-800 border-green-200'; // 16/20 = 80%
+    if (grade >= 12) return 'bg-yellow-100 text-yellow-800 border-yellow-200'; // 12/20 = 60%
     return 'bg-red-100 text-red-800 border-red-200';
   };
 
   const getGradeIcon = (grade) => {
-    if (grade >= 80) return '🟢';
-    if (grade >= 60) return '🟡';
+    if (grade >= 16) return '🟢'; // 16/20 = 80%
+    if (grade >= 12) return '🟡'; // 12/20 = 60%
     return '🔴';
   };
 
@@ -151,7 +152,7 @@ export default function Grades() {
                       </span>
                     </div>
                     <div className="text-right">
-                      <div className="text-2xl font-bold text-gray-800">{g.finalGrade}%</div>
+                      <div className="text-2xl font-bold text-gray-800">{g.finalGrade}/20</div>
                       <div className="text-sm text-gray-500">Final Grade</div>
                     </div>
                   </div>
@@ -159,15 +160,15 @@ export default function Grades() {
                   <div className="grid grid-cols-3 gap-4">
                     <div className="text-center p-3 bg-gray-50 rounded-lg">
                       <div className="text-sm text-gray-600 mb-1">Homework</div>
-                      <div className="text-lg font-semibold text-gray-800">{g.homework}%</div>
+                      <div className="text-lg font-semibold text-gray-800">{g.homework}/20</div>
                     </div>
                     <div className="text-center p-3 bg-gray-50 rounded-lg">
                       <div className="text-sm text-gray-600 mb-1">Test</div>
-                      <div className="text-lg font-semibold text-gray-800">{g.test}%</div>
+                      <div className="text-lg font-semibold text-gray-800">{g.test}/20</div>
                     </div>
                     <div className="text-center p-3 bg-gray-50 rounded-lg">
                       <div className="text-sm text-gray-600 mb-1">Exam</div>
-                      <div className="text-lg font-semibold text-gray-800">{g.exam}%</div>
+                      <div className="text-lg font-semibold text-gray-800">{g.exam}/20</div>
                     </div>
                   </div>
                 </div>

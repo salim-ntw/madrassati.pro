@@ -15,7 +15,7 @@ export const studentAPI = {
   getGrades: (studentId) => api.get(`/student/${studentId}/grades`),
   
   // GET /student/:id/homework
-  getHomework: (studentId) => api.get(`/student/${studentId}/homework`),
+  getHomeworks: (studentId) => api.get(`/student/${studentId}/homework`),
   
   // GET /student/:id/exams
   getExams: (studentId) => api.get(`/student/${studentId}/exams`),
