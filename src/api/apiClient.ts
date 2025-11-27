@@ -1,5 +1,5 @@
 /**
- * API Client Helper
+ * API Client Helper (TypeScript)
  * Centralized API URL management using environment variables
  * 
  * This helper automatically prepends the backend API URL from environment variables
@@ -21,7 +21,7 @@
  */
 
 // Get API base URL from environment variable, fallback to localhost for development
-const getApiBaseUrl = () => {
+const getApiBaseUrl = (): string => {
   // Note: In Vite, we use import.meta.env (not process.env)
   // Vite requires VITE_ prefix, but we also support REACT_APP_API_URL for compatibility
   // Priority: REACT_APP_API_URL > VITE_API_URL > default localhost
@@ -31,11 +31,11 @@ const getApiBaseUrl = () => {
     'http://localhost:4000';
   
   // Ensure URL doesn't end with a slash
-  return apiUrl.replace(/\/$/, '');
+  return String(apiUrl).replace(/\/$/, '');
 };
 
 // Get Socket.IO URL (same as API URL but without /api path)
-const getSocketUrl = () => {
+const getSocketUrl = (): string => {
   return getApiBaseUrl();
 };
 
@@ -44,37 +44,37 @@ const getSocketUrl = () => {
  */
 export const apiClient = {
   /**
-   * Get the base API URL
+   * Get the base API URL (without /api suffix)
    * @returns {string} Base API URL
    */
-  getBaseUrl: () => getApiBaseUrl(),
+  getBaseUrl: (): string => getApiBaseUrl(),
 
   /**
    * Get the full API URL with /api prefix
    * @returns {string} Full API URL
    */
-  getApiUrl: () => `${getApiBaseUrl()}/api`,
+  getApiUrl: (): string => `${getApiBaseUrl()}/api`,
 
   /**
    * Get Socket.IO URL
    * @returns {string} Socket.IO URL
    */
-  getSocketUrl: () => getSocketUrl(),
+  getSocketUrl: (): string => getSocketUrl(),
 
   /**
    * Build a full API endpoint URL
    * @param {string} endpoint - API endpoint (e.g., '/messages' or 'messages')
    * @returns {string} Full URL
    */
-  url: (endpoint) => {
+  url: (endpoint: string): string => {
     const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
     return `${getApiBaseUrl()}/api${cleanEndpoint}`;
   },
 };
 
 // Export constants for backward compatibility
-export const BASE_URL = apiClient.getApiUrl();
-export const SOCKET_URL = apiClient.getSocketUrl();
+export const BASE_URL: string = apiClient.getApiUrl();
+export const SOCKET_URL: string = apiClient.getSocketUrl();
 
 // Default export
 export default apiClient;
