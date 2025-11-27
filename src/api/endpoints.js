@@ -1,7 +1,9 @@
 // API Endpoints Verification
 // This file documents all the exact URLs used by the frontend
 
-const BASE_URL = 'http://localhost:4000/api';
+import { apiClient } from './apiClient.js';
+
+const BASE_URL = apiClient.getApiUrl();
 
 export const ENDPOINTS = {
   // Authentication endpoints
@@ -103,6 +105,9 @@ export const printEndpointVerification = () => {
 };
 
 export default ENDPOINTS;
+
+
+
 
 
 

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { messageAPI } from '../../../api/messages';
 import { io } from 'socket.io-client';
+import { apiClient } from '../../../api/apiClient';
 
 export default function Messages() {
   const { teacherId } = useParams();
@@ -22,7 +23,7 @@ export default function Messages() {
 
   // Initialize socket connection
   useEffect(() => {
-    socket.current = io('http://localhost:4000');
+    socket.current = io(apiClient.getSocketUrl());
     
     socket.current.on('connect', () => {
       console.log('🔌 Connected to server');
