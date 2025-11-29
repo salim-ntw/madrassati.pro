@@ -8,7 +8,7 @@
  * Environment Variable Priority:
  * 1. REACT_APP_API_URL (user preference)
  * 2. VITE_API_URL (Vite standard)
- * 3. Default: http://localhost:4000 (for local development)
+ * 3. Development fallback (only if env vars are not set - will log warning)
  * 
  * Usage:
  *   import { apiClient } from './api/apiClient';
@@ -20,18 +20,27 @@
  *   api.get('/messages'); // Automatically uses the correct base URL
  */
 
-// Get API base URL from environment variable, fallback to localhost for development
+// Get API base URL from environment variable
 const getApiBaseUrl = () => {
   // Note: In Vite, we use import.meta.env (not process.env)
   // Vite requires VITE_ prefix, but we also support REACT_APP_API_URL for compatibility
-  // Priority: REACT_APP_API_URL > VITE_API_URL > default localhost
+  // Priority: REACT_APP_API_URL > VITE_API_URL > fallback
   const apiUrl = 
     import.meta.env.REACT_APP_API_URL || 
-    import.meta.env.VITE_API_URL || 
-    'http://localhost:4000';
+    import.meta.env.VITE_API_URL;
+  
+  // If no environment variable is set, log a warning and use development fallback
+  if (!apiUrl) {
+    console.warn(
+      '⚠️  No API URL environment variable found (REACT_APP_API_URL or VITE_API_URL).\n' +
+      '   Using development fallback: http://localhost:4000\n' +
+      '   Please set REACT_APP_API_URL or VITE_API_URL in your .env file.'
+    );
+    return 'http://localhost:4000';
+  }
   
   // Ensure URL doesn't end with a slash
-  return apiUrl.replace(/\/$/, '');
+  return String(apiUrl).replace(/\/$/, '');
 };
 
 // Get Socket.IO URL (same as API URL but without /api path)
